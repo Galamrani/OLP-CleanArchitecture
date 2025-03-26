@@ -1,0 +1,22 @@
+@url=http://localhost:5048/api/user
+
+
+### Add Progress Endpoint
+POST {{url}}/register
+Content-Type: application/json
+
+{
+  "Name": "John Doe",
+  "Email": "john.doe@example.com",
+  "Password": "SecurePassword123!"
+}
+
+
+### Add Lesson Endpoint
+POST {{url}}/login
+Content-Type: application/json
+
+{
+  "Email": "john.doe@example.com",
+  "Password": "SecurePassword123!"
+}

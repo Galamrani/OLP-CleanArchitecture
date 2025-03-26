@@ -1,0 +1,74 @@
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.swp
+
+# Ignore NuGet packages
+*.nupkg
+packages/
+.nuget/
+
+# Ignore compiled files
+*.dll
+*.exe
+*.pdb
+*.cache
+*.ilk
+*.lib
+*.ndk
+*.obj
+*.o
+*.so
+*.idb
+*.tlog
+*.log
+*.vspscc
+*.vssscc
+
+# Ignore publish outputs
+publish/
+out/
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+*.rej
+*.sublime-workspace
+*.sublime-project
+
+# Ignore Angular client folder
+client/node_modules/
+client/dist/
+client/.angular/cache/
+
+# Ignore environment files
+*.env
+*.env.local
+*.env.development
+*.env.production
+*.env.test
+
+# Ignore Swagger generated files
+swagger/
+swagger-ui/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db

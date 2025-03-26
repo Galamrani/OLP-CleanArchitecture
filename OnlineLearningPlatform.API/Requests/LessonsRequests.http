@@ -1,0 +1,46 @@
+@url=http://localhost:5048/api/lesson
+@courseId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
+@lessonId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
+
+
+
+### Add Progress Endpoint
+POST {{url}}/{{lessonId}}/progress
+Content-Type: application/json
+
+{
+  "UserId": "987f6543-abcd-4321-b567-890123456789",
+  "LessonId": "5e8d583f-23f0-4c13-af3a-0ca0e90860c5"
+}
+
+
+### Add Lesson Endpoint
+POST {{url}}/{{courseId}}
+Content-Type: application/json
+
+{
+    "CourseId": "5e8d583f-23f0-4c13-af3a-0ca0e90860c5",
+    "Title": "Example Lesson",
+    "Description": "This is an example lesson.",
+    "VideoUrl": "https://example.com/video.mp4"
+}
+
+
+### Update Lesson Endpoint
+PATCH  {{url}}/{{lessonId}}
+Content-Type: application/json
+
+{
+    "CourseId": "5e8d583f-23f0-4c13-af3a-0ca0e90860c5",
+    "Title": "Example Lesson 2",
+    "Description": "This is an example lesson.",
+    "VideoUrl": "https://example.com/video.mp4"
+}
+
+
+### Delete Lesson Endpoint
+DELETE  {{url}}/{{lessonId}}
+Content-Type: application/json
+
+
+
