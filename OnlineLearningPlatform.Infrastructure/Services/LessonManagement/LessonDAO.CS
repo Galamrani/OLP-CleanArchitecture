@@ -1,27 +1,41 @@
-using OnlineLearningPlatform.Application.DTOs;
+using Microsoft.EntityFrameworkCore;
 using OnlineLearningPlatform.Application.Interfaces;
+using OnlineLearningPlatform.Domain.Entities;
+using OnlineLearningPlatform.Infrastructure.Persistence.Database;
 
 namespace OnlineLearningPlatform.Infrastructure.Services.LessonManagement;
 
-public class LessonDAO : ILessonDAO
+public class LessonDAO(AppDbContext context) : ILessonDAO
 {
-    public Task<LessonDto> AddLessonAsync(Guid userId, LessonDto lessonDto)
+    private readonly AppDbContext context = context;
+
+    public async Task<Lesson?> GetLessonAsync(Guid lessonId)
     {
-        throw new NotImplementedException();
+        return await context.Lessons.SingleOrDefaultAsync(l => l.Id == lessonId);
     }
 
-    public Task<bool> AddProgressAsync(ProgressDto progressDto)
+    public async Task<Guid> GetLessonCreatorIdAsync(Guid courseId)
     {
-        throw new NotImplementedException();
+        return await context.Courses
+            .Where(c => c.Id == courseId)
+            .AsNoTracking()
+            .Select(c => c.CreatorId)
+            .FirstOrDefaultAsync();
     }
 
-    public Task<bool> DeleteLessonAsync(Guid userId, Guid lessonId)
+    public async Task AddLessonAsync(Lesson lesson)
     {
-        throw new NotImplementedException();
+        await context.Lessons.AddAsync(lesson);
     }
 
-    public Task<LessonDto> UpdateLessonAsync(Guid userId, LessonDto lessonDto)
+    public async Task AddProgressAsync(Progress progress)
     {
-        throw new NotImplementedException();
+        await context.Progresses.AddAsync(progress);
+    }
+
+    public Task DeleteLessonAsync(Lesson lesson)
+    {
+        context.Lessons.Remove(lesson);
+        return Task.CompletedTask;
     }
 }

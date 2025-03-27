@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using OnlineLearningPlatform.Application.DTOs;
 using OnlineLearningPlatform.Application.Interfaces;
 using OnlineLearningPlatform.Domain.Entities;
-using OnlineLearningPlatform.Infrastructure.Database;
+using OnlineLearningPlatform.Infrastructure.Persistence.Database;
 
 namespace OnlineLearningPlatform.Infrastructure.Services.CourseManagement;
 
@@ -18,7 +17,6 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
             .ToListAsync();
     }
 
-    // TODO: add InvalidOperationException if more then one, to the exception handler
     public Task<Course?> GetBasicCourseAsync(Guid courseId)
     {
         return context.Courses
@@ -26,7 +24,6 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
             .SingleOrDefaultAsync(c => c.Id == courseId);
     }
 
-    // TODO: add InvalidOperationException if more then one, to the exception handler
     public Task<Course?> GetFullCourseAsync(Guid userId, Guid courseId)
     {
         return context.Courses
@@ -54,18 +51,14 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
             .ToListAsync();
     }
 
-    public Task<Course> AddCourseAsync(CourseDto courseDto)
+    public async Task AddCourseAsync(Course course)
     {
-        throw new NotImplementedException();
+        await context.Courses.AddAsync(course);
     }
 
-    public Task<bool> DeleteCourseAsync(Guid userId, Guid courseId)
+    public Task DeleteCourseAsync(Course course)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<Course> UpdateCourseAsync(Guid userId, CourseDto courseDto)
-    {
-        throw new NotImplementedException();
+        context.Courses.Remove(course);
+        return Task.CompletedTask;
     }
 }

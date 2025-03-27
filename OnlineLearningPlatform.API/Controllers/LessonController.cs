@@ -6,7 +6,7 @@ using OnlineLearningPlatform.Application.Services.LessonManagement;
 
 namespace OnlineLearningPlatform.API.Controllers;
 
-// [Authorize]
+[Authorize]
 public class LessonController(ILessonService lessonService) : ApiControllerBase
 {
     private readonly ILessonService lessonService = lessonService;
@@ -33,7 +33,7 @@ public class LessonController(ILessonService lessonService) : ApiControllerBase
     }
 
     [HttpPatch("{lessonId}")]
-    public async Task<IActionResult> UpdateLesson(Guid lessonId, [FromBody] LessonDto lessonDto)
+    public async Task<IActionResult> UpdateLesson([FromBody] LessonDto lessonDto)
     {
         LessonDto lesson = await lessonService.UpdateLessonAsync(GetUserId(HttpContext), lessonDto);
         return Ok(lesson);

@@ -10,7 +10,6 @@ public interface ICourseDAO
     Task<List<Course>> GetCoursesAsync();
     Task<List<Course>> GetUserCreatedCoursesAsync(Guid userId);
     Task<List<Course>> GetUserEnrolledCoursesAsync(Guid userId);
-    Task<Course> AddCourseAsync(CourseDto courseDto);
-    Task<Course> UpdateCourseAsync(Guid userId, CourseDto courseDto);
-    Task<bool> DeleteCourseAsync(Guid userId, Guid courseId);
+    Task AddCourseAsync(Course course);
+    Task DeleteCourseAsync(Course course);
 }

@@ -7,5 +7,5 @@ public interface ILessonService
     Task<LessonDto> AddLessonAsync(Guid userId, LessonDto lessonDto);
     Task<LessonDto> UpdateLessonAsync(Guid userId, LessonDto lessonDto);
     Task<ProgressDto> AddProgressAsync(ProgressDto progressDto);
-    Task<bool> DeleteLessonAsync(Guid userId, Guid lessonId);
+    Task DeleteLessonAsync(Guid userId, Guid lessonId);
 }

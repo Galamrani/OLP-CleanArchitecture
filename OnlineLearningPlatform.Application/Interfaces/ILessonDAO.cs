@@ -1,11 +1,14 @@
 using OnlineLearningPlatform.Application.DTOs;
+using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.Application.Interfaces;
 
 public interface ILessonDAO
 {
-    Task<LessonDto> AddLessonAsync(Guid userId, LessonDto lessonDto);
-    Task<LessonDto> UpdateLessonAsync(Guid userId, LessonDto lessonDto);
-    Task<bool> AddProgressAsync(ProgressDto progressDto);
-    Task<bool> DeleteLessonAsync(Guid userId, Guid lessonId);
+    Task<Lesson?> GetLessonAsync(Guid lessonId);
+    Task<Guid> GetLessonCreatorIdAsync(Guid courseId);
+    Task AddLessonAsync(Lesson lesson);
+    Task AddProgressAsync(Progress progress);
+    Task DeleteLessonAsync(Lesson lesson);
+
 }

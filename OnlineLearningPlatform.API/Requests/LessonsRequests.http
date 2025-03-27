@@ -1,25 +1,28 @@
 @url=http://localhost:5048/api/lesson
-@courseId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
-@lessonId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
+@courseId=c4fad3c9-2447-4801-bfd1-c205624feaed
+@lessonId=df89891c-59ca-48a2-8a06-1e52823bf6c3
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzNmVkY2ZkNS1iYTAyLTQxNDQtOTg1MC0zYTJiMzkwYzUzZTQiLCJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkpvaG4iLCJuYmYiOjE3NDMwODg0MzYsImV4cCI6MTc0MzEwNjQzNiwiaWF0IjoxNzQzMDg4NDM2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.Hi1GlE7F0YcdUzNCawiHgeeRjb1ZiRDmpCycFh7M0V0
 
-
+@userId=36edcfd5-ba02-4144-9850-3a2b390c53e4
 
 ### Add Progress Endpoint
-POST {{url}}/{{lessonId}}/progress
+POST {{url}}/add-progress
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "UserId": "987f6543-abcd-4321-b567-890123456789",
-  "LessonId": "5e8d583f-23f0-4c13-af3a-0ca0e90860c5"
+  "UserId": "{{userId}}",
+  "LessonId": "{{lessonId}}"
 }
 
 
 ### Add Lesson Endpoint
 POST {{url}}/{{courseId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "CourseId": "5e8d583f-23f0-4c13-af3a-0ca0e90860c5",
+    "CourseId": "{{courseId}}",
     "Title": "Example Lesson",
     "Description": "This is an example lesson.",
     "VideoUrl": "https://example.com/video.mp4"
@@ -28,10 +31,12 @@ Content-Type: application/json
 
 ### Update Lesson Endpoint
 PATCH  {{url}}/{{lessonId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "CourseId": "5e8d583f-23f0-4c13-af3a-0ca0e90860c5",
+    "Id": "{{lessonId}}",
+    "CourseId": "{{courseId}}",
     "Title": "Example Lesson 2",
     "Description": "This is an example lesson.",
     "VideoUrl": "https://example.com/video.mp4"
@@ -40,6 +45,7 @@ Content-Type: application/json
 
 ### Delete Lesson Endpoint
 DELETE  {{url}}/{{lessonId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 

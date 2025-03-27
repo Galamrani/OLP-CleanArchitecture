@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineLearningPlatform.Domain.Entities;
 
-namespace OnlineLearningPlatform.Infrastructure.Database;
+namespace OnlineLearningPlatform.Infrastructure.Persistence.Database;
 public class AppDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }

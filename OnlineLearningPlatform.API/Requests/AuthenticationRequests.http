@@ -1,7 +1,7 @@
 @url=http://localhost:5048/api/user
 
 
-### Add Progress Endpoint
+### Register Endpoint
 POST {{url}}/register
 Content-Type: application/json
 
@@ -12,11 +12,11 @@ Content-Type: application/json
 }
 
 
-### Add Lesson Endpoint
+### Login Endpoint
 POST {{url}}/login
 Content-Type: application/json
 
 {
-  "Email": "john.doe@example.com",
-  "Password": "SecurePassword123!"
+  "Email": "john@example.com",
+  "Password": "Pa$$w0rd"
 }

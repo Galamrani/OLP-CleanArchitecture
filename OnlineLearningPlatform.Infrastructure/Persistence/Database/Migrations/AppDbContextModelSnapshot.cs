@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineLearningPlatform.Infrastructure.Database;
+using OnlineLearningPlatform.Infrastructure.Persistence.Database;
 
 #nullable disable
 

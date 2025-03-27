@@ -1,6 +1,9 @@
 @url=http://localhost:5048/api/course
-@courseId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
+@courseId=dc4ca92b-55df-43aa-82a1-08dd6d41a6b5
 @lessonId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMGRiY2FmNC05NWYxLTQyNWEtODU3ZS0xMDE3MzBlZGVhNzAiLCJlbWFpbCI6InNhcmFoQGV4YW1wbGUuY29tIiwidW5pcXVlX25hbWUiOiJTYXJhaCIsIm5iZiI6MTc0MzA4NjA5OSwiZXhwIjoxNzQzMTA0MDk5LCJpYXQiOjE3NDMwODYwOTksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAxMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDIwMCJ9.T9fOqy7NXs4p16pMq4kKM8_fGZxoSXSn3w6-mDXPQ20
+@creatorId=00dbcaf4-95f1-425a-857e-101730edea70
+
 
 
 
@@ -16,16 +19,19 @@ Content-Type: application/json
 
 ### Get Full Course Endpoint
 GET {{url}}/full-course/{{courseId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 
-### Get Enrolled Courses Endpoint
+### Get Enrolled Courses Endpoint 
 GET {{url}}/student/my-courses
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 
 ### Get Created Course Endpoint
 GET {{url}}/instructor/my-courses
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 
@@ -34,38 +40,44 @@ Content-Type: application/json
 
 ### Add Course Endpoint
 POST {{url}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "creatorId": "e92cce9f-d8b6-44ad-a837-1f0e4f66a37d",
+  "creatorId": "{{creatorId}}",
   "title": "Introduction to Machine Learning",
   "description": "A beginner-friendly course on the fundamentals of machine learning."
 }
 
 
-### Add Enrollment Endpoint
-POST {{url}}/{{courseId}}
-Content-Type: application/json
-
-
 ### Update Course Endpoint
 PATCH  {{url}}/{{courseId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "creatorId": "e92cce9f-d8b6-44ad-a837-1f0e4f66a37d",
+  "id": "{{courseId}}",
+  "creatorId": "{{creatorId}}",
   "title": "Introduction to Machine Learning 2",
   "description": "A beginner-friendly course on the fundamentals of machine learning."
 }
 
 
 ### Delete Course Endpoint
-DELETE  {{url}}/{{lessonId}}
+DELETE  {{url}}/{{courseId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### Add Enrollment Endpoint
+POST {{url}}/{{courseId}}/enroll
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 
 ### Delete Enrollment Endpoint
 DELETE  {{url}}/{{courseId}}/unenroll
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 

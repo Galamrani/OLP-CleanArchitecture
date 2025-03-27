@@ -1,7 +1,7 @@
 using OnlineLearningPlatform.Domain.Entities;
 using OnlineLearningPlatform.Domain.Utils;
 
-namespace OnlineLearningPlatform.Infrastructure.Database;
+namespace OnlineLearningPlatform.Infrastructure.Persistence.Database;
 public class SeedData
 {
     private readonly Dictionary<string, Guid> _guids;
