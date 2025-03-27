@@ -1,0 +1,42 @@
+<div>
+  <form [formGroup]="courseForm" (submit)="send()">
+    <h1>Add Course</h1>
+
+    <label>Title: </label>
+    <input type="text" formControlName="title" />
+    <div
+      *ngIf="
+        courseForm.get('title')?.invalid &&
+        (courseForm.get('title')?.dirty || courseForm.get('title')?.touched)
+      "
+      class="error"
+    >
+      <span *ngIf="courseForm.get('title')?.errors?.['required']"
+        >Title is required.</span
+      >
+      <span *ngIf="courseForm.get('title')?.errors?.['minlength']"
+        >Title must be at least 5 characters.</span
+      >
+      <span *ngIf="courseForm.get('title')?.errors?.['maxlength']"
+        >Title cannot exceed 200 characters.</span
+      >
+    </div>
+
+    <label>description: </label>
+    <input type="text" formControlName="description" />
+    <div
+      *ngIf="
+        courseForm.get('description')?.invalid &&
+        (courseForm.get('description')?.dirty ||
+          courseForm.get('description')?.touched)
+      "
+      class="error"
+    >
+      <span *ngIf="courseForm.get('description')?.errors?.['maxlength']"
+        >Description cannot exceed 2000 characters.</span
+      >
+    </div>
+
+    <button [disabled]="courseForm.invalid">Add</button>
+  </form>
+</div>

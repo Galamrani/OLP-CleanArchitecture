@@ -3,7 +3,7 @@ using System.Text;
 
 namespace OnlineLearningPlatform.Domain.Utils;
 
-public class PasswordHasher
+public static class PasswordHasher
 {
     // Hash with salting: 
     public static string HashPassword(string plainText)

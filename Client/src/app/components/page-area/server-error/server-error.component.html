@@ -1,0 +1,27 @@
+<div class="error-container">
+  <div class="error-content">
+    <h1>500</h1>
+    <h2>Server Error</h2>
+    <p>{{ errorMessage }}</p>
+
+    @if (errorDetails) {
+    <div class="error-details">
+      <h3>Error Details:</h3>
+      <pre>{{ errorDetails | json }}</pre>
+    </div>
+    }
+
+    <div class="error-actions">
+      <a routerLink="/" class="btn-primary">Go to Home</a>
+    </div>
+  </div>
+
+  <div class="error-image">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M100 20C55.2 20 20 55.2 20 100s35.2 80 80 80 80-35.2 80-80S144.8 20 100 20zm0 140c-33.1 0-60-26.9-60-60s26.9-60 60-60 60 26.9 60 60-26.9 60-60 60z"
+      />
+      <path d="M70 70v20h20V70H70zm40 0v20h20V70h-20zm-40 40v20h60v-20H70z" />
+    </svg>
+  </div>
+</div>

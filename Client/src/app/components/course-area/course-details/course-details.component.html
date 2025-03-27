@@ -1,0 +1,58 @@
+<div class="container" *ngIf="courses$ | async">
+  <!-- Course Title -->
+  <h2 class="text-primary fw-bold mb-3">
+    {{ currentCourse()?.title }}
+  </h2>
+
+  <!-- Course Description -->
+  <p class="text-muted fs-5 mb-4">
+    {{ currentCourse()?.description }}
+  </p>
+
+  <!-- Progress Bar -->
+  <div class="mb-4">
+    @if (viewStore.view() === CourseViewType.Student) {
+    <app-progress-bar
+      [courseCompletionPercentage]="calcCourseProgress(currentCourse())"
+    ></app-progress-bar>
+    } @if (currentCourse() && viewStore.view() === CourseViewType.Instructor) {
+    <div class="d-flex gap-2">
+      <button
+        class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+        [routerLink]="['/lessons/add']"
+        [queryParams]="{ courseId: currentCourse()?.id }"
+      >
+        <i class="bi bi-plus-circle"></i> Add Lesson
+      </button>
+    </div>
+    }
+  </div>
+
+  <!-- Lessons Section -->
+  <h4 class="fw-bold text-dark mb-3">Course Lessons:</h4>
+
+  @if (currentCourse() && currentCourse()!.lessons &&
+  currentCourse()!.lessons!.length > 0) {
+  <div class="container">
+    <div class="row g-3">
+      @for (lesson of currentCourse()?.lessons; track lesson.id) {
+      <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+        <app-lesson-card
+          [lesson]="lesson"
+          (deleteLessonClicked)="onDeleteLesson($event)"
+          (videoClicked)="onWatchedVideo($event)"
+        ></app-lesson-card>
+      </div>
+      }
+    </div>
+  </div>
+  } @else {
+  <!-- No Lessons Available View -->
+  <div
+    class="d-flex flex-column align-items-center justify-content-center py-5"
+  >
+    <i class="bi bi-journal-x text-muted fs-1 mb-3"></i>
+    <p class="text-muted fs-5">No lessons available.</p>
+  </div>
+  }
+</div>

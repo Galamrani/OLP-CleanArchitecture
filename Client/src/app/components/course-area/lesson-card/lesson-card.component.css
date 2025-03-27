@@ -1,0 +1,113 @@
+.lesson-card {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  overflow: hidden;
+  height: 100%; /* ✅ Ensures all cards are equal in height */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: white;
+}
+
+/* Ensures the content inside the card grows properly */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* ✅ Ensures content expands */
+  padding: 1.5rem;
+}
+
+/* Fixed Title Size (2 lines max) */
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  max-height: 2.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Fixed Description Size (Always 3 lines) */
+.description {
+  font-size: 0.95rem;
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* ✅ Always 3 lines */
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-height: 1.5rem; /* ✅ Ensures consistent spacing */
+  min-height: 4.5rem; /* ✅ Forces 3-line space */
+}
+
+/* Video Thumbnail */
+.video-thumbnail {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Lock Overlay */
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+}
+
+/* Clickable Video Link (Covers Entire Thumbnail) */
+.video-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+/* Makes Buttons Stick to the Bottom */
+.mt-auto {
+  margin-top: auto !important;
+  padding-top: 1rem;
+}
+
+/* Buttons */
+.btn {
+  min-width: 80px;
+}
+
+/* Hover Effect */
+.lesson-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-color: rgba(13, 110, 253, 0.3);
+  background: rgba(13, 110, 253, 0.05); /* ✅ Light hover background */
+}
+
+/* Subtle title color change on hover */
+.lesson-card:hover .card-title {
+  color: #0b5ed7;
+}
+
+/* Gradient Hover Effect */
+.lesson-card:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+}

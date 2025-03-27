@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLearningPlatform.Application.DTOs;
 using OnlineLearningPlatform.Application.Services.Authentication;
 
 namespace OnlineLearningPlatform.API.Controllers;
 
+[AllowAnonymous]
 public class UserController(IAuthenticationService authenticationService) : ApiControllerBase
 {
     private readonly IAuthenticationService authenticationService = authenticationService;

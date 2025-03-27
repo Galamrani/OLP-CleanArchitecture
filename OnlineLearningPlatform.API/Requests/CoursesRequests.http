@@ -1,0 +1,72 @@
+@url=http://localhost:5048/api/course
+@courseId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
+@lessonId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
+
+
+
+### Get Courses Endpoint
+GET {{url}}
+Content-Type: application/json
+
+
+### Get Basic Course Endpoint
+GET {{url}}/{{courseId}}
+Content-Type: application/json
+
+
+### Get Full Course Endpoint
+GET {{url}}/full-course/{{courseId}}
+Content-Type: application/json
+
+
+### Get Enrolled Courses Endpoint
+GET {{url}}/student/my-courses
+Content-Type: application/json
+
+
+### Get Created Course Endpoint
+GET {{url}}/instructor/my-courses
+Content-Type: application/json
+
+
+### ----------------------------------
+
+
+### Add Course Endpoint
+POST {{url}}
+Content-Type: application/json
+
+{
+  "creatorId": "e92cce9f-d8b6-44ad-a837-1f0e4f66a37d",
+  "title": "Introduction to Machine Learning",
+  "description": "A beginner-friendly course on the fundamentals of machine learning."
+}
+
+
+### Add Enrollment Endpoint
+POST {{url}}/{{courseId}}
+Content-Type: application/json
+
+
+### Update Course Endpoint
+PATCH  {{url}}/{{courseId}}
+Content-Type: application/json
+
+{
+  "creatorId": "e92cce9f-d8b6-44ad-a837-1f0e4f66a37d",
+  "title": "Introduction to Machine Learning 2",
+  "description": "A beginner-friendly course on the fundamentals of machine learning."
+}
+
+
+### Delete Course Endpoint
+DELETE  {{url}}/{{lessonId}}
+Content-Type: application/json
+
+
+### Delete Enrollment Endpoint
+DELETE  {{url}}/{{courseId}}/unenroll
+Content-Type: application/json
+
+
+

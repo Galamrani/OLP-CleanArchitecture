@@ -1,0 +1,58 @@
+<div class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">Transform Your Future With Online Learning</h1>
+    <p class="hero-subtitle">
+      Access expert-led courses, earn certifications, and advance your career
+      from anywhere.
+    </p>
+    <div class="hero-cta">
+      <div class="hero-cta">
+        @if (!userStore.isLoggedIn()) {
+        <button class="btn-primary" [routerLink]="'/register'">
+          Get Started
+        </button>
+        }
+
+        <button class="btn-primary" [routerLink]="'/courses/default'">
+          Explore Courses
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="features-section">
+  <h2 class="section-title">Why Choose Our Platform</h2>
+  <div class="feature-cards">
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3>Expert-Led Courses</h3>
+      <p>Learn from industry professionals with real-world experience.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📤</div>
+      <h3>Upload Courses</h3>
+      <p>Share your knowledge by creating and publishing courses.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3>Enroll in Courses</h3>
+      <p>Join courses and start learning from top instructors.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h3>Track Your Progress</h3>
+      <p>Monitor your learning journey with personalized progress tracking.</p>
+    </div>
+  </div>
+</div>
+
+@if (!userStore.isLoggedIn()) {
+<div class="cta-section">
+  <div class="cta-content">
+    <h2>Ready to Start Your Learning Journey?</h2>
+    <p>Join our students already learning on the platform.</p>
+    <button class="btn-primary" [routerLink]="'/register'">Sign Up Now</button>
+  </div>
+</div>
+}

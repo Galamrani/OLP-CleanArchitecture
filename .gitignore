@@ -72,3 +72,20 @@ swagger-ui/
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
+
+# Angular specific files
+client/node_modules/
+client/dist/
+client/.angular/cache/
+client/.angular/analytics.json
+
+# Angular environment files
+client/src/environments/environment*.ts
+
+# Angular temporary files
+client/tmp/
+client/temp/
+client/.idea/
+client/.vscode/
+client/.DS_Store
+client/Thumbs.db

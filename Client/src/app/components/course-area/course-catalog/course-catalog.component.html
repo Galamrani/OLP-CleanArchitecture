@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="container-fluid py-3">
+    <h2
+      class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
+      style="color: #1ea545"
+      *ngIf="viewStore.view() == CourseViewType.Default"
+    >
+      <i class="bi bi-mortarboard-fill"></i> Explore Available Courses 🛍️
+    </h2>
+    <h2
+      class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
+      style="color: #d20919"
+      *ngIf="viewStore.view() == CourseViewType.Instructor"
+    >
+      <i class="bi bi-mortarboard-fill"></i> Courses You've Created 📚
+    </h2>
+    <h2
+      class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
+      style="color: #c710dc"
+      *ngIf="viewStore.view() == CourseViewType.Student"
+    >
+      <i class="bi bi-mortarboard-fill"></i> Your Learning Journey 🚀
+    </h2>
+  </div>
+
+  @if (viewStore.view() === CourseViewType.Instructor) {
+  <div class="d-flex gap-2 mb-3">
+    <button
+      class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+      [routerLink]="['/courses/add']"
+    >
+      <i class="bi bi-pencil"></i> Add Course
+    </button>
+  </div>
+  }
+
+  <hr class="mb-4" />
+  <ng-container *ngIf="courses$ | async as courses">
+    @if (courses.length > 0) {
+    <div class="container">
+      <div class="row g-3">
+        @for (course of courses; track course.id) {
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+          <app-course-card
+            [course]="course"
+            (deleteCourseClicked)="onDeleteCourse($event)"
+            (unenrollCourseClicked)="onUnenrollCourse($event)"
+            (enrollCourseClicked)="onEnrollCourse($event)"
+            class="w-100 shadow-sm rounded"
+          ></app-course-card>
+        </div>
+        }
+      </div>
+    </div>
+    } @else {
+    <div
+      class="d-flex flex-column align-items-center justify-content-center py-5"
+    >
+      <i class="bi bi-box text-muted fs-1 mb-3"></i>
+      <p class="text-muted fs-5">No courses available.</p>
+    </div>
+    }
+  </ng-container>
+</div>

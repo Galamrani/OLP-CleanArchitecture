@@ -1,5 +1,4 @@
-namespace OnlineLearningPlatform.Infrastructure.Authentication;
-
+namespace OnlineLearningPlatform.Infrastructure.Services.Authentication;
 public class JwtSettings
 {
     public string Issuer { get; set; } = string.Empty;

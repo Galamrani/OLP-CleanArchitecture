@@ -1,0 +1,21 @@
+h2 {
+  font-size: 1.8rem;
+}
+
+.btn-sm i {
+  font-size: 1rem;
+}
+
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+hr {
+  border-top: 2px solid #ddd;
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+}

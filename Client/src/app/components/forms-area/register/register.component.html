@@ -1,0 +1,70 @@
+<div>
+  <form [formGroup]="userForm" (submit)="send()">
+    <h1>Register</h1>
+
+    <label>Name: </label>
+    <input type="text" formControlName="name" />
+    <div
+      *ngIf="
+        userForm.get('name')?.invalid &&
+        (userForm.get('name')?.dirty || userForm.get('name')?.touched)
+      "
+      class="error"
+    >
+      <span *ngIf="userForm.get('name')?.errors?.['required']"
+        >Name is required.</span
+      >
+      <span *ngIf="userForm.get('name')?.errors?.['minlength']"
+        >Name must be at least 2 characters.</span
+      >
+      <span *ngIf="userForm.get('name')?.errors?.['maxlength']"
+        >Name cannot exceed 100 characters.</span
+      >
+    </div>
+
+    <label>Email: </label>
+    <input type="email" formControlName="email" />
+    <div
+      *ngIf="
+        userForm.get('email')?.invalid &&
+        (userForm.get('email')?.dirty || userForm.get('email')?.touched)
+      "
+      class="error"
+    >
+      <span *ngIf="userForm.get('email')?.errors?.['required']"
+        >Email is required.</span
+      >
+      <span *ngIf="userForm.get('email')?.errors?.['email']"
+        >Invalid email format.</span
+      >
+    </div>
+
+    <label>Password: </label>
+    <input type="password" formControlName="password" />
+    <div
+      *ngIf="
+        userForm.get('password')?.invalid &&
+        (userForm.get('password')?.dirty || userForm.get('password')?.touched)
+      "
+      class="error"
+    >
+      <span *ngIf="userForm.get('password')?.errors?.['required']"
+        >Password is required.</span
+      >
+      <span *ngIf="userForm.get('password')?.errors?.['minlength']"
+        >Password must be at least 8 characters long.</span
+      >
+      <span *ngIf="hasUppercaseError()"
+        >Password must contain at least one uppercase letter.</span
+      >
+      <span *ngIf="hasDigitError()"
+        >Password must contain at least one digit.</span
+      >
+      <span *ngIf="hasSpecialCharError()"
+        >Password must contain at least one special character.</span
+      >
+    </div>
+
+    <button [disabled]="userForm.invalid">Register</button>
+  </form>
+</div>

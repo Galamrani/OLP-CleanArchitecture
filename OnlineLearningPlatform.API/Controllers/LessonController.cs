@@ -1,37 +1,42 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLearningPlatform.Application.DTOs;
+using OnlineLearningPlatform.Application.Services.CourseManagement;
+using OnlineLearningPlatform.Application.Services.LessonManagement;
 
 namespace OnlineLearningPlatform.API.Controllers;
 
-public class LessonController : ApiControllerBase
+// [Authorize]
+public class LessonController(ILessonService lessonService) : ApiControllerBase
 {
-    // [Authorize]
-    [HttpPost("{lessonId}/progress")]
-    public async Task<IActionResult> AddProgress(Guid lessonId, [FromBody] ProgressDto progressDto)
+    private readonly ILessonService lessonService = lessonService;
+
+    [HttpPost("add-progress")]
+    public async Task<IActionResult> AddProgress([FromBody] ProgressDto progressDto)
     {
-        return Ok(progressDto);
+        ProgressDto progress = await lessonService.AddProgressAsync(progressDto);
+        return Created(string.Empty, progress);
     }
 
-    // [Authorize]
     [HttpPost("{courseId}")]
     public async Task<IActionResult> AddLesson(Guid courseId, [FromBody] LessonDto lessonDto)
     {
-        return Ok(lessonDto);
+        LessonDto lesson = await lessonService.AddLessonAsync(GetUserId(HttpContext), lessonDto);
+        return Created(string.Empty, lesson);
     }
 
-    // [Authorize]
     [HttpDelete("{lessonId}")]
     public async Task<IActionResult> DeleteLesson(Guid lessonId)
     {
-        return Ok(lessonId);
+        await lessonService.DeleteLessonAsync(GetUserId(HttpContext), lessonId);
+        return NoContent();
     }
 
-    // [Authorize]
     [HttpPatch("{lessonId}")]
     public async Task<IActionResult> UpdateLesson(Guid lessonId, [FromBody] LessonDto lessonDto)
     {
-        return Ok(lessonDto);
+        LessonDto lesson = await lessonService.UpdateLessonAsync(GetUserId(HttpContext), lessonDto);
+        return Ok(lesson);
     }
 }
 

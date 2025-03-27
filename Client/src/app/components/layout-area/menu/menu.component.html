@@ -1,0 +1,44 @@
+<div class="d-flex align-items-center">
+  <h5 class="me-3 mb-0 d-none d-md-block">
+    <span class="text-muted"
+      >Welcome, {{ userStore.getUserName() ?? "Guest" | titlecase }}</span
+    >
+  </h5>
+  <div ngbDropdown>
+    <button
+      type="button"
+      class="btn btn-outline-primary rounded-pill px-3"
+      id="dropdownBasic1"
+      ngbDropdownToggle
+    >
+      Menu
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="shadow-sm">
+      @if (userStore.isLoggedIn()) {
+      <button
+        ngbDropdownItem
+        (click)="navigateToCourseCatalog(CourseViewType.Default)"
+      >
+        All Courses
+      </button>
+      <button
+        ngbDropdownItem
+        (click)="navigateToCourseCatalog(CourseViewType.Student)"
+      >
+        Student view
+      </button>
+      <button
+        ngbDropdownItem
+        (click)="navigateToCourseCatalog(CourseViewType.Instructor)"
+      >
+        Instructor view
+      </button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="logout()">Logout</button>
+      } @else {
+      <button ngbDropdownItem [routerLink]="'/login'">Login</button>
+      <button ngbDropdownItem [routerLink]="'/register'">Register</button>
+      }
+    </div>
+  </div>
+</div>

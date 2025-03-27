@@ -1,0 +1,15 @@
+<div class="mt-4">
+  <h2 class="text-lg font-semibold">Course Progress</h2>
+  <div class="progress" style="height: 20px">
+    <div
+      class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+      role="progressbar"
+      [style.width.%]="courseCompletionPercentage()"
+      [attr.aria-valuenow]="courseCompletionPercentage()"
+      aria-valuemin="0"
+      aria-valuemax="100"
+    >
+      {{ courseCompletionPercentage() | number : "1.0-0" }}%
+    </div>
+  </div>
+</div>

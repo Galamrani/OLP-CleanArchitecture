@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using OnlineLearningPlatform.Application.Interfaces;
 using OnlineLearningPlatform.Domain.Entities;
 
-namespace OnlineLearningPlatform.Infrastructure.Authentication;
+namespace OnlineLearningPlatform.Infrastructure.Services.Authentication;
 
 public class TokenGenerator(IOptions<JwtSettings> jwtOptions) : ITokenGenerator
 {

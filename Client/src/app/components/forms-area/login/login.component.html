@@ -1,0 +1,52 @@
+<div>
+  <form [formGroup]="credentialsForm" (submit)="send()">
+    <h1>Login</h1>
+
+    <label>Email: </label>
+    <input type="email" formControlName="email" />
+    <div
+      *ngIf="
+        credentialsForm.get('email')?.invalid &&
+        (credentialsForm.get('email')?.dirty ||
+          credentialsForm.get('email')?.touched)
+      "
+      class="error"
+    >
+      <span *ngIf="credentialsForm.get('email')?.errors?.['required']"
+        >Email is required.</span
+      >
+      <span *ngIf="credentialsForm.get('email')?.errors?.['email']"
+        >Invalid email format.</span
+      >
+    </div>
+
+    <label>Password: </label>
+    <input type="password" formControlName="password" />
+    <div
+      *ngIf="
+        credentialsForm.get('password')?.invalid &&
+        (credentialsForm.get('password')?.dirty ||
+          credentialsForm.get('password')?.touched)
+      "
+      class="error"
+    >
+      <span *ngIf="credentialsForm.get('password')?.errors?.['required']"
+        >Password is required.</span
+      >
+      <span *ngIf="credentialsForm.get('password')?.errors?.['minlength']"
+        >Password must be at least 8 characters long.</span
+      >
+      <span *ngIf="hasUppercaseError()"
+        >Password must contain at least one uppercase letter.</span
+      >
+      <span *ngIf="hasDigitError()"
+        >Password must contain at least one digit.</span
+      >
+      <span *ngIf="hasSpecialCharError()"
+        >Password must contain at least one special character.</span
+      >
+    </div>
+
+    <button [disabled]="credentialsForm.invalid">Login</button>
+  </form>
+</div>
