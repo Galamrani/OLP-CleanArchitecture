@@ -9,9 +9,11 @@ public class LessonDAO(AppDbContext context) : ILessonDAO
 {
     private readonly AppDbContext context = context;
 
-    public async Task<Lesson?> GetLessonAsync(Guid lessonId)
+    public async Task<Lesson?> GetLessonAsync(Guid userId, Guid lessonId)
     {
-        return await context.Lessons.SingleOrDefaultAsync(l => l.Id == lessonId);
+        return await context.Lessons
+            .Include(l => l.Progresses.Where(p => p.UserId == userId))
+            .SingleOrDefaultAsync(l => l.Id == lessonId);
     }
 
     public async Task<Guid> GetLessonCreatorIdAsync(Guid courseId)

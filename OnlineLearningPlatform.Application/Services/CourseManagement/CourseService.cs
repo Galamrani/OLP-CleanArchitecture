@@ -66,7 +66,7 @@ public class CourseService(ICourseDAO courseDAO, IUnitOfWork unitOfWork, IMapper
 
     public async Task<CourseDto> UpdateCourseAsync(Guid userId, CourseDto courseDto)
     {
-        Course? course = await courseDAO.GetBasicCourseAsync(courseDto.Id);
+        Course? course = await courseDAO.GetFullCourseAsync(userId, courseDto.Id);
 
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseDto.Id} was not found.");
         if (course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to update this course. You are not the creator.");
@@ -79,7 +79,7 @@ public class CourseService(ICourseDAO courseDAO, IUnitOfWork unitOfWork, IMapper
 
     public async Task<CourseDto> EnrollToCourseAsync(Guid userId, Guid courseId)
     {
-        Course? course = await courseDAO.GetBasicCourseAsync(courseId);
+        Course? course = await courseDAO.GetFullCourseAsync(userId, courseId);
 
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
         if (course.Enrollments.Any(e => e.UserId == userId)) throw new InvalidOperationException("User is already enrolled in this course.");
@@ -102,7 +102,7 @@ public class CourseService(ICourseDAO courseDAO, IUnitOfWork unitOfWork, IMapper
 
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
-        Enrollment? enrollment = course.Enrollments.FirstOrDefault(e => e.UserId == userId);
+        Enrollment? enrollment = (await courseDAO.GetUserEnrollmentsAsync(userId)).FirstOrDefault(e => e.CourseId == courseId);
 
         if (enrollment is null) throw new InvalidOperationException("User is not enrolled to this course.");
 

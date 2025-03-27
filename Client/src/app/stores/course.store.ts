@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { CourseModel } from '../models/course.model';
-import { LessonModel } from '../models/lesson.model';
-import { ProgressModel } from '../models/progress.model';
+import { Injectable } from "@angular/core";
+import { CourseModel } from "../models/course.model";
+import { LessonModel } from "../models/lesson.model";
+import { ProgressModel } from "../models/progress.model";
 
 /**
  *
@@ -23,11 +23,11 @@ import { ProgressModel } from '../models/progress.model';
  */
 
 enum CoursesStorageKey {
-  CreatedCourses = 'createdCourses',
-  EnrolledCourses = 'enrolledCourses',
+  CreatedCourses = "createdCourses",
+  EnrolledCourses = "enrolledCourses",
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CourseStore {
   private _createdCourses: Map<string, CourseModel> =
     this.loadFromStorage(CoursesStorageKey.CreatedCourses) || new Map();
@@ -131,7 +131,6 @@ export class CourseStore {
 
   pushLesson(courseId: string, lesson: LessonModel) {
     const course = this._createdCourses.get(courseId);
-    console.log(course); // to delete
     if (!course || !course.lessons) {
       return;
     }

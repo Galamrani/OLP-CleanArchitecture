@@ -23,7 +23,7 @@ public class LessonService(ILessonDAO lessonDAO, IUnitOfWork unitOfWork, IMapper
 
     public async Task<ProgressDto> AddProgressAsync(ProgressDto progressDto)
     {
-        Lesson? lesson = await lessonDAO.GetLessonAsync(progressDto.LessonId);
+        Lesson? lesson = await lessonDAO.GetLessonAsync(progressDto.UserId, progressDto.LessonId);
 
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {progressDto.LessonId} was not found.");
 
@@ -36,7 +36,7 @@ public class LessonService(ILessonDAO lessonDAO, IUnitOfWork unitOfWork, IMapper
 
     public async Task DeleteLessonAsync(Guid userId, Guid lessonId)
     {
-        Lesson? lesson = await lessonDAO.GetLessonAsync(lessonId);
+        Lesson? lesson = await lessonDAO.GetLessonAsync(userId, lessonId);
 
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonId} was not found.");
         if (!await IsCreatorByCourseId(userId, lesson.CourseId)) throw new UnauthorizedAccessException("You are not allowed to delete this lesson. You are not the creator.");
@@ -47,7 +47,7 @@ public class LessonService(ILessonDAO lessonDAO, IUnitOfWork unitOfWork, IMapper
 
     public async Task<LessonDto> UpdateLessonAsync(Guid userId, LessonDto lessonDto)
     {
-        Lesson? lesson = await lessonDAO.GetLessonAsync(lessonDto.Id);
+        Lesson? lesson = await lessonDAO.GetLessonAsync(userId, lessonDto.Id);
 
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonDto.Id} was not found.");
         if (!await IsCreatorByCourseId(userId, lessonDto.CourseId)) throw new UnauthorizedAccessException("You are not allowed to update this lesson. You are not the creator.");

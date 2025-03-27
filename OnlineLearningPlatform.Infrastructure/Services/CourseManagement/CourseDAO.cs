@@ -17,6 +17,11 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
             .ToListAsync();
     }
 
+    public async Task<List<Enrollment>> GetUserEnrollmentsAsync(Guid userId)
+    {
+        return await context.Enrollments.Where(e => e.UserId == userId).ToListAsync();
+    }
+
     public Task<Course?> GetBasicCourseAsync(Guid courseId)
     {
         return context.Courses

@@ -12,7 +12,7 @@ public class Course
 
     public DateTime CreatedAt { get; set; }
 
-    public virtual User? Creator { get; set; } = null!;
+    public User? Creator { get; set; } = null!;
 
     public ICollection<Enrollment> Enrollments { get; set; } = new HashSet<Enrollment>();
 

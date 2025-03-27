@@ -17,6 +17,14 @@ using OnlineLearningPlatform.Infrastructure.Services.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 {
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("DevelopmentCorsPolicy", policy =>
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod());
+    });
+
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
     builder.Services.AddAuthentication(options =>
     {
@@ -60,10 +68,11 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 {
+    app.UseCors("DevelopmentCorsPolicy");
+
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.UseHttpsRedirection();
     app.MapControllers();
 }
 

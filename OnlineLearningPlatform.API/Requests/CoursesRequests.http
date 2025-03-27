@@ -70,13 +70,13 @@ Content-Type: application/json
 
 
 ### Add Enrollment Endpoint
-POST {{url}}/{{courseId}}/enroll
+POST {{url}}/enroll/{{courseId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 
 ### Delete Enrollment Endpoint
-DELETE  {{url}}/{{courseId}}/unenroll
+DELETE  {{url}}/unenroll/{{courseId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
