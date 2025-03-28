@@ -1,8 +1,8 @@
 @url=http://localhost:5048/api/course
-@courseId=dc4ca92b-55df-43aa-82a1-08dd6d41a6b5
+@courseId=e1dd25b2-60a2-42c4-893e-c580c6abb65c
 @lessonId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMGRiY2FmNC05NWYxLTQyNWEtODU3ZS0xMDE3MzBlZGVhNzAiLCJlbWFpbCI6InNhcmFoQGV4YW1wbGUuY29tIiwidW5pcXVlX25hbWUiOiJTYXJhaCIsIm5iZiI6MTc0MzA4NjA5OSwiZXhwIjoxNzQzMTA0MDk5LCJpYXQiOjE3NDMwODYwOTksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAxMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDIwMCJ9.T9fOqy7NXs4p16pMq4kKM8_fGZxoSXSn3w6-mDXPQ20
-@creatorId=00dbcaf4-95f1-425a-857e-101730edea70
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4YWU2YWNjNS00YWExLTRjMzMtYTAwNS03Y2M0MmQ0YThkNDQiLCJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkpvaG4iLCJuYmYiOjE3NDMxNTUzNTAsImV4cCI6MTc0MzE3MzM1MCwiaWF0IjoxNzQzMTU1MzUwLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.HSTcsIL44IZO1pbvzgqxypuoMMwoC4AqpAftapjUiy8
+@creatorId=8ae6acc5-4aa1-4c33-a005-7cc42d4a8d44
 
 
 
@@ -58,7 +58,7 @@ Content-Type: application/json
 {
   "id": "{{courseId}}",
   "creatorId": "{{creatorId}}",
-  "title": "Introduction to Machine Learning 2",
+  "title": "Introduction to Machine Learning 3",
   "description": "A beginner-friendly course on the fundamentals of machine learning."
 }
 

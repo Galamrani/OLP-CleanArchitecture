@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
+namespace OnlineLearningPlatform.Infrastructure.Persistence.Database.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -126,9 +126,9 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                 columns: new[] { "Id", "Email", "Name", "Password" },
                 values: new object[,]
                 {
-                    { new Guid("00dbcaf4-95f1-425a-857e-101730edea70"), "sarah@example.com", "Sarah", "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw==" },
-                    { new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"), "john@example.com", "John", "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw==" },
-                    { new Guid("555f610b-1169-4bfc-ae8b-3af123f7b480"), "bart@example.com", "Bart", "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw==" }
+                    { new Guid("066e8439-8764-4837-b429-310fb72b5384"), "bart@example.com", "Bart", "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw==" },
+                    { new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d"), "sarah@example.com", "Sarah", "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw==" },
+                    { new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"), "john@example.com", "John", "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw==" }
                 });
 
             migrationBuilder.InsertData(
@@ -136,30 +136,30 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                 columns: new[] { "Id", "CreatedAt", "CreatorId", "Description", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("015a803a-57d8-4746-8f49-b89721371342"), new DateTime(2025, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"), "Learn how to design and develop robust REST APIs using ASP.NET Core, covering controllers, authentication, and best practices.", "Building RESTful APIs with ASP.NET Core" },
-                    { new Guid("2020690e-f61d-4093-8832-8b1097665fa0"), new DateTime(2025, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"), "A comprehensive course covering the basics of C# programming language, including syntax, data types, and object-oriented concepts.", "Introduction to C# Programming" },
-                    { new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"), new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"), "An in-depth guide to working with Entity Framework Core, covering migrations, relationships, and performance optimization.", "Mastering Entity Framework Core" },
-                    { new Guid("c4fad3c9-2447-4801-bfd1-c205624feaed"), new DateTime(2025, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"), "A hands-on course focused on writing effective unit tests in .NET using xUnit, Moq, and Test-Driven Development (TDD) principles.", "Unit Testing in .NET" }
+                    { new Guid("1902028d-4628-4520-8f77-7246d68240e1"), new DateTime(2025, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"), "Learn how to design and develop robust REST APIs using ASP.NET Core, covering controllers, authentication, and best practices.", "Building RESTful APIs with ASP.NET Core" },
+                    { new Guid("2a34494a-143b-4951-a7cd-028e8587e921"), new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"), "An in-depth guide to working with Entity Framework Core, covering migrations, relationships, and performance optimization.", "Mastering Entity Framework Core" },
+                    { new Guid("6f5295bf-6ffc-44ed-96da-af5f75221525"), new DateTime(2025, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"), "A hands-on course focused on writing effective unit tests in .NET using xUnit, Moq, and Test-Driven Development (TDD) principles.", "Unit Testing in .NET" },
+                    { new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"), new DateTime(2025, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"), "A comprehensive course covering the basics of C# programming language, including syntax, data types, and object-oriented concepts.", "Introduction to C# Programming" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Enrollments",
                 columns: new[] { "Id", "CourseId", "EnrolledAt", "UserId" },
-                values: new object[] { new Guid("1e2edfb3-b191-4eb0-a283-29d25084d395"), new Guid("2020690e-f61d-4093-8832-8b1097665fa0"), new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00dbcaf4-95f1-425a-857e-101730edea70") });
+                values: new object[] { new Guid("f9a10b04-ad23-4c3c-af56-b9122a925b7b"), new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"), new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d") });
 
             migrationBuilder.InsertData(
                 table: "Lessons",
                 columns: new[] { "Id", "CourseId", "Description", "Title", "VideoUrl" },
                 values: new object[,]
                 {
-                    { new Guid("1cd7665c-2550-4c2c-b5b2-e1b12103ac2a"), new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"), "Learn how to use LINQ queries in EF Core to fetch data.", "Querying Data with LINQ", "https://www.youtube.com/watch?v=DuozyaJQQ1U" },
-                    { new Guid("62099240-e2d7-498a-bf61-53b4ddb2a8df"), new Guid("2020690e-f61d-4093-8832-8b1097665fa0"), "Learn about arithmetic, logical, and comparison operators in C#.", "Operators and Expressions", "https://www.youtube.com/watch?v=WL7QEhdqh00" },
-                    { new Guid("6511c33a-ac65-429d-8a30-ebe77496bdd5"), new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"), "How to create and apply migrations in EF Core.", "Working with Migrations", "https://www.youtube.com/watch?v=ZoKRFVBsm7E" },
-                    { new Guid("b2ad1223-276e-4456-8417-aea0099ccb0b"), new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"), "Overview of EF Core and setting up the DbContext.", "Introduction to Entity Framework Core", "https://www.youtube.com/watch?v=KcFWOMbGJ4M" },
-                    { new Guid("c0b01fde-4295-4569-a1d3-64940486af83"), new Guid("015a803a-57d8-4746-8f49-b89721371342"), "Implementing authentication and role-based authorization in ASP.NET Core.", "Authentication and Authorization", "https://www.youtube.com/watch?v=eUW2CYAT1Nk" },
-                    { new Guid("cb0c4c0b-6138-4209-9a1b-e616dd0a4eaa"), new Guid("2020690e-f61d-4093-8832-8b1097665fa0"), "Installation and setup of development environment.", "Getting Started with C#", "https://www.youtube.com/watch?v=ravLFzIguCM" },
-                    { new Guid("df89891c-59ca-48a2-8a06-1e52823bf6c3"), new Guid("2020690e-f61d-4093-8832-8b1097665fa0"), "Understanding variables and different data types in C#.", "Variables and Data Types", "https://www.youtube.com/watch?v=_D-HCF3jZKk" },
-                    { new Guid("f46f18df-66ca-43b4-9f76-97b915d765c6"), new Guid("015a803a-57d8-4746-8f49-b89721371342"), "Understanding controllers, routing, and API responses.", "Building RESTful APIs with ASP.NET Core", "https://www.youtube.com/watch?v=JiJeZOHx0ow" }
+                    { new Guid("00c42a25-21d8-4935-8a6d-df4505c894b2"), new Guid("2a34494a-143b-4951-a7cd-028e8587e921"), "Learn how to use LINQ queries in EF Core to fetch data.", "Querying Data with LINQ", "https://www.youtube.com/watch?v=DuozyaJQQ1U" },
+                    { new Guid("27e63227-4065-4420-bc7d-a12c07d9794d"), new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"), "Understanding variables and different data types in C#.", "Variables and Data Types", "https://www.youtube.com/watch?v=_D-HCF3jZKk" },
+                    { new Guid("a9381301-217c-4632-929d-16117adf76b9"), new Guid("1902028d-4628-4520-8f77-7246d68240e1"), "Understanding controllers, routing, and API responses.", "Building RESTful APIs with ASP.NET Core", "https://www.youtube.com/watch?v=JiJeZOHx0ow" },
+                    { new Guid("d93cfa8d-0fa8-48fe-a5df-9dc8401dec7d"), new Guid("2a34494a-143b-4951-a7cd-028e8587e921"), "Overview of EF Core and setting up the DbContext.", "Introduction to Entity Framework Core", "https://www.youtube.com/watch?v=KcFWOMbGJ4M" },
+                    { new Guid("dd05067b-62b2-4820-af41-f954b4e24f35"), new Guid("1902028d-4628-4520-8f77-7246d68240e1"), "Implementing authentication and role-based authorization in ASP.NET Core.", "Authentication and Authorization", "https://www.youtube.com/watch?v=eUW2CYAT1Nk" },
+                    { new Guid("eca16da4-4b50-47bb-b8c4-ec98ca0eb458"), new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"), "Learn about arithmetic, logical, and comparison operators in C#.", "Operators and Expressions", "https://www.youtube.com/watch?v=WL7QEhdqh00" },
+                    { new Guid("f3bed488-0cab-4ad7-a961-1a055debdf0d"), new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"), "Installation and setup of development environment.", "Getting Started with C#", "https://www.youtube.com/watch?v=ravLFzIguCM" },
+                    { new Guid("fd11e0f0-d972-4e73-8af4-c47ea2d25a82"), new Guid("2a34494a-143b-4951-a7cd-028e8587e921"), "How to create and apply migrations in EF Core.", "Working with Migrations", "https://www.youtube.com/watch?v=ZoKRFVBsm7E" }
                 });
 
             migrationBuilder.InsertData(
@@ -167,9 +167,9 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                 columns: new[] { "Id", "LastWatchedAt", "LessonId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("4420877e-a7e1-4228-9e3c-b7bace465b03"), new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("df89891c-59ca-48a2-8a06-1e52823bf6c3"), new Guid("00dbcaf4-95f1-425a-857e-101730edea70") },
-                    { new Guid("83faecf7-f987-433a-b37e-7c179707e899"), new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("cb0c4c0b-6138-4209-9a1b-e616dd0a4eaa"), new Guid("555f610b-1169-4bfc-ae8b-3af123f7b480") },
-                    { new Guid("f008e742-bdba-4f31-bd35-2ce8c7c0d90b"), new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("cb0c4c0b-6138-4209-9a1b-e616dd0a4eaa"), new Guid("00dbcaf4-95f1-425a-857e-101730edea70") }
+                    { new Guid("62a40bc4-a952-48fd-b50b-4971c8da23f1"), new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("27e63227-4065-4420-bc7d-a12c07d9794d"), new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d") },
+                    { new Guid("c5289e43-0485-45ea-a1b0-64ae9ae1d32d"), new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("f3bed488-0cab-4ad7-a961-1a055debdf0d"), new Guid("066e8439-8764-4837-b429-310fb72b5384") },
+                    { new Guid("f464c138-8ca6-4e4e-8af8-d9162de73cba"), new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("f3bed488-0cab-4ad7-a961-1a055debdf0d"), new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d") }
                 });
 
             migrationBuilder.CreateIndex(

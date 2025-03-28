@@ -70,18 +70,4 @@ public class CourseController(ICourseService courseService) : ApiControllerBase
         CourseDto course = await courseService.UpdateCourseAsync(GetUserId(HttpContext), courseDto);
         return Ok(course);
     }
-
-    [HttpPost("enroll/{courseId}")]
-    public async Task<IActionResult> EnrollToCourse(Guid courseId)
-    {
-        CourseDto course = await courseService.EnrollToCourseAsync(GetUserId(HttpContext), courseId);
-        return CreatedAtAction(nameof(GetBasicCourse), new { courseId }, course);
-    }
-
-    [HttpDelete("unenroll/{courseId}")]
-    public async Task<IActionResult> UnenrollToCourse(Guid courseId)
-    {
-        await courseService.UnenrollToCourseAsync(GetUserId(HttpContext), courseId);
-        return NoContent();
-    }
 }

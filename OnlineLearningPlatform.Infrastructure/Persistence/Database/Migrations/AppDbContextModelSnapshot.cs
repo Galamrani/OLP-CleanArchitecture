@@ -4,12 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OnlineLearningPlatform.Infrastructure.Database;
 using OnlineLearningPlatform.Infrastructure.Persistence.Database;
 
 #nullable disable
 
-namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
+namespace OnlineLearningPlatform.Infrastructure.Persistence.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -55,33 +54,33 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2020690e-f61d-4093-8832-8b1097665fa0"),
+                            Id = new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"),
                             CreatedAt = new DateTime(2025, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"),
+                            CreatorId = new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"),
                             Description = "A comprehensive course covering the basics of C# programming language, including syntax, data types, and object-oriented concepts.",
                             Title = "Introduction to C# Programming"
                         },
                         new
                         {
-                            Id = new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"),
+                            Id = new Guid("2a34494a-143b-4951-a7cd-028e8587e921"),
                             CreatedAt = new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"),
+                            CreatorId = new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"),
                             Description = "An in-depth guide to working with Entity Framework Core, covering migrations, relationships, and performance optimization.",
                             Title = "Mastering Entity Framework Core"
                         },
                         new
                         {
-                            Id = new Guid("015a803a-57d8-4746-8f49-b89721371342"),
+                            Id = new Guid("1902028d-4628-4520-8f77-7246d68240e1"),
                             CreatedAt = new DateTime(2025, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"),
+                            CreatorId = new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"),
                             Description = "Learn how to design and develop robust REST APIs using ASP.NET Core, covering controllers, authentication, and best practices.",
                             Title = "Building RESTful APIs with ASP.NET Core"
                         },
                         new
                         {
-                            Id = new Guid("c4fad3c9-2447-4801-bfd1-c205624feaed"),
+                            Id = new Guid("6f5295bf-6ffc-44ed-96da-af5f75221525"),
                             CreatedAt = new DateTime(2025, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"),
+                            CreatorId = new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"),
                             Description = "A hands-on course focused on writing effective unit tests in .NET using xUnit, Moq, and Test-Driven Development (TDD) principles.",
                             Title = "Unit Testing in .NET"
                         });
@@ -116,10 +115,10 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1e2edfb3-b191-4eb0-a283-29d25084d395"),
-                            CourseId = new Guid("2020690e-f61d-4093-8832-8b1097665fa0"),
+                            Id = new Guid("f9a10b04-ad23-4c3c-af56-b9122a925b7b"),
+                            CourseId = new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"),
                             EnrolledAt = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("00dbcaf4-95f1-425a-857e-101730edea70")
+                            UserId = new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d")
                         });
                 });
 
@@ -155,64 +154,64 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cb0c4c0b-6138-4209-9a1b-e616dd0a4eaa"),
-                            CourseId = new Guid("2020690e-f61d-4093-8832-8b1097665fa0"),
+                            Id = new Guid("f3bed488-0cab-4ad7-a961-1a055debdf0d"),
+                            CourseId = new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"),
                             Description = "Installation and setup of development environment.",
                             Title = "Getting Started with C#",
                             VideoUrl = "https://www.youtube.com/watch?v=ravLFzIguCM"
                         },
                         new
                         {
-                            Id = new Guid("df89891c-59ca-48a2-8a06-1e52823bf6c3"),
-                            CourseId = new Guid("2020690e-f61d-4093-8832-8b1097665fa0"),
+                            Id = new Guid("27e63227-4065-4420-bc7d-a12c07d9794d"),
+                            CourseId = new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"),
                             Description = "Understanding variables and different data types in C#.",
                             Title = "Variables and Data Types",
                             VideoUrl = "https://www.youtube.com/watch?v=_D-HCF3jZKk"
                         },
                         new
                         {
-                            Id = new Guid("62099240-e2d7-498a-bf61-53b4ddb2a8df"),
-                            CourseId = new Guid("2020690e-f61d-4093-8832-8b1097665fa0"),
+                            Id = new Guid("eca16da4-4b50-47bb-b8c4-ec98ca0eb458"),
+                            CourseId = new Guid("ef0c94df-ff57-48e7-9073-311d66747dc4"),
                             Description = "Learn about arithmetic, logical, and comparison operators in C#.",
                             Title = "Operators and Expressions",
                             VideoUrl = "https://www.youtube.com/watch?v=WL7QEhdqh00"
                         },
                         new
                         {
-                            Id = new Guid("b2ad1223-276e-4456-8417-aea0099ccb0b"),
-                            CourseId = new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"),
+                            Id = new Guid("d93cfa8d-0fa8-48fe-a5df-9dc8401dec7d"),
+                            CourseId = new Guid("2a34494a-143b-4951-a7cd-028e8587e921"),
                             Description = "Overview of EF Core and setting up the DbContext.",
                             Title = "Introduction to Entity Framework Core",
                             VideoUrl = "https://www.youtube.com/watch?v=KcFWOMbGJ4M"
                         },
                         new
                         {
-                            Id = new Guid("6511c33a-ac65-429d-8a30-ebe77496bdd5"),
-                            CourseId = new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"),
+                            Id = new Guid("fd11e0f0-d972-4e73-8af4-c47ea2d25a82"),
+                            CourseId = new Guid("2a34494a-143b-4951-a7cd-028e8587e921"),
                             Description = "How to create and apply migrations in EF Core.",
                             Title = "Working with Migrations",
                             VideoUrl = "https://www.youtube.com/watch?v=ZoKRFVBsm7E"
                         },
                         new
                         {
-                            Id = new Guid("1cd7665c-2550-4c2c-b5b2-e1b12103ac2a"),
-                            CourseId = new Guid("222a68ba-ef6d-4efd-b4b2-671eea2b89a5"),
+                            Id = new Guid("00c42a25-21d8-4935-8a6d-df4505c894b2"),
+                            CourseId = new Guid("2a34494a-143b-4951-a7cd-028e8587e921"),
                             Description = "Learn how to use LINQ queries in EF Core to fetch data.",
                             Title = "Querying Data with LINQ",
                             VideoUrl = "https://www.youtube.com/watch?v=DuozyaJQQ1U"
                         },
                         new
                         {
-                            Id = new Guid("f46f18df-66ca-43b4-9f76-97b915d765c6"),
-                            CourseId = new Guid("015a803a-57d8-4746-8f49-b89721371342"),
+                            Id = new Guid("a9381301-217c-4632-929d-16117adf76b9"),
+                            CourseId = new Guid("1902028d-4628-4520-8f77-7246d68240e1"),
                             Description = "Understanding controllers, routing, and API responses.",
                             Title = "Building RESTful APIs with ASP.NET Core",
                             VideoUrl = "https://www.youtube.com/watch?v=JiJeZOHx0ow"
                         },
                         new
                         {
-                            Id = new Guid("c0b01fde-4295-4569-a1d3-64940486af83"),
-                            CourseId = new Guid("015a803a-57d8-4746-8f49-b89721371342"),
+                            Id = new Guid("dd05067b-62b2-4820-af41-f954b4e24f35"),
+                            CourseId = new Guid("1902028d-4628-4520-8f77-7246d68240e1"),
                             Description = "Implementing authentication and role-based authorization in ASP.NET Core.",
                             Title = "Authentication and Authorization",
                             VideoUrl = "https://www.youtube.com/watch?v=eUW2CYAT1Nk"
@@ -247,24 +246,24 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f008e742-bdba-4f31-bd35-2ce8c7c0d90b"),
+                            Id = new Guid("f464c138-8ca6-4e4e-8af8-d9162de73cba"),
                             LastWatchedAt = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LessonId = new Guid("cb0c4c0b-6138-4209-9a1b-e616dd0a4eaa"),
-                            UserId = new Guid("00dbcaf4-95f1-425a-857e-101730edea70")
+                            LessonId = new Guid("f3bed488-0cab-4ad7-a961-1a055debdf0d"),
+                            UserId = new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d")
                         },
                         new
                         {
-                            Id = new Guid("4420877e-a7e1-4228-9e3c-b7bace465b03"),
+                            Id = new Guid("62a40bc4-a952-48fd-b50b-4971c8da23f1"),
                             LastWatchedAt = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LessonId = new Guid("df89891c-59ca-48a2-8a06-1e52823bf6c3"),
-                            UserId = new Guid("00dbcaf4-95f1-425a-857e-101730edea70")
+                            LessonId = new Guid("27e63227-4065-4420-bc7d-a12c07d9794d"),
+                            UserId = new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d")
                         },
                         new
                         {
-                            Id = new Guid("83faecf7-f987-433a-b37e-7c179707e899"),
+                            Id = new Guid("c5289e43-0485-45ea-a1b0-64ae9ae1d32d"),
                             LastWatchedAt = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LessonId = new Guid("cb0c4c0b-6138-4209-9a1b-e616dd0a4eaa"),
-                            UserId = new Guid("555f610b-1169-4bfc-ae8b-3af123f7b480")
+                            LessonId = new Guid("f3bed488-0cab-4ad7-a961-1a055debdf0d"),
+                            UserId = new Guid("066e8439-8764-4837-b429-310fb72b5384")
                         });
                 });
 
@@ -298,21 +297,21 @@ namespace OnlineLearningPlatform.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("36edcfd5-ba02-4144-9850-3a2b390c53e4"),
+                            Id = new Guid("db2daef7-1b42-4c9f-9c07-56aba27a27ed"),
                             Email = "john@example.com",
                             Name = "John",
                             Password = "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw=="
                         },
                         new
                         {
-                            Id = new Guid("00dbcaf4-95f1-425a-857e-101730edea70"),
+                            Id = new Guid("b59beaef-513f-4dd3-aef1-28fd0b94a42d"),
                             Email = "sarah@example.com",
                             Name = "Sarah",
                             Password = "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw=="
                         },
                         new
                         {
-                            Id = new Guid("555f610b-1169-4bfc-ae8b-3af123f7b480"),
+                            Id = new Guid("066e8439-8764-4837-b429-310fb72b5384"),
                             Email = "bart@example.com",
                             Name = "Bart",
                             Password = "ol7P+JWmNfXtag31+7OW58hUXbIXMvJm4eFqmepOqbesGfnKytuRXpMeGXyZnPIZDYLSBnrjfzWlkPu4MVPtrw=="

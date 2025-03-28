@@ -52,7 +52,10 @@ public class LessonService(ILessonDAO lessonDAO, IUnitOfWork unitOfWork, IMapper
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonDto.Id} was not found.");
         if (!await IsCreatorByCourseId(userId, lessonDto.CourseId)) throw new UnauthorizedAccessException("You are not allowed to update this lesson. You are not the creator.");
 
+        var existingProgresses = lesson.Progresses;
         mapper.Map(lessonDto, lesson);
+        lesson.Progresses = existingProgresses;
+
         await unitOfWork.SaveChangesAsync();
 
         return mapper.Map<LessonDto>(lesson);

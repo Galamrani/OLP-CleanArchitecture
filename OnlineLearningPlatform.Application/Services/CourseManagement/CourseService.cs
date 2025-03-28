@@ -71,42 +71,12 @@ public class CourseService(ICourseDAO courseDAO, IUnitOfWork unitOfWork, IMapper
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseDto.Id} was not found.");
         if (course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to update this course. You are not the creator.");
 
+        var existingLessons = course.Lessons;
         mapper.Map(courseDto, course);
+        course.Lessons = existingLessons;
+
         await unitOfWork.SaveChangesAsync();
 
         return mapper.Map<CourseDto>(course);
-    }
-
-    public async Task<CourseDto> EnrollToCourseAsync(Guid userId, Guid courseId)
-    {
-        Course? course = await courseDAO.GetFullCourseAsync(userId, courseId);
-
-        if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
-        if (course.Enrollments.Any(e => e.UserId == userId)) throw new InvalidOperationException("User is already enrolled in this course.");
-
-        Enrollment enrollment = new Enrollment
-        {
-            UserId = userId,
-            CourseId = courseId
-        };
-
-        course.Enrollments.Add(enrollment);
-        await unitOfWork.SaveChangesAsync();
-
-        return mapper.Map<CourseDto>(course);
-    }
-
-    public async Task UnenrollToCourseAsync(Guid userId, Guid courseId)
-    {
-        Course? course = await courseDAO.GetBasicCourseAsync(courseId);
-
-        if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
-
-        Enrollment? enrollment = (await courseDAO.GetUserEnrollmentsAsync(userId)).FirstOrDefault(e => e.CourseId == courseId);
-
-        if (enrollment is null) throw new InvalidOperationException("User is not enrolled to this course.");
-
-        course.Enrollments.Remove(enrollment);
-        await unitOfWork.SaveChangesAsync();
     }
 }

@@ -1,0 +1,46 @@
+@url=http://localhost:5048/api/course
+@url2=http://localhost:5048/api/user
+@courseId=ef0c94df-ff57-48e7-9073-311d66747dc4
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwNjZlODQzOS04NzY0LTQ4MzctYjQyOS0zMTBmYjcyYjUzODQiLCJlbWFpbCI6ImJhcnRAZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkJhcnQiLCJuYmYiOjE3NDMxNzA2NDIsImV4cCI6MTc0MzE4ODY0MiwiaWF0IjoxNzQzMTcwNjQyLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.4OuU_iGj5gO53h49KqjsJgFtNrqT3GGLjK35vBtklrs
+
+
+
+@creatorId=db2daef7-1b42-4c9f-9c07-56aba27a27ed
+
+
+
+### (UnauthorizedAccessException) Unauthorized update (not creator)
+PATCH {{url}}/{{courseId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": "{{courseId}}",
+  "creatorId": "{{creatorId}}",  
+  "title": "Hacked Title",
+  "description": "Oops"
+}
+
+
+### (InvalidOperationException) Unenroll from a course you're not enrolled in
+DELETE  {{url2}}/unenroll/{{courseId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### (KeyNotFoundException) Get a non-existent course
+GET {{url}}/full-course/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### (ValidationException) Create course with missing title (validation error)
+POST {{url}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "creatorId": "{{creatorId}}",
+  "title": "",
+  "description": "Fine"
+}

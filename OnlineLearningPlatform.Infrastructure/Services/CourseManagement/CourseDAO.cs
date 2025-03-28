@@ -17,11 +17,6 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
             .ToListAsync();
     }
 
-    public async Task<List<Enrollment>> GetUserEnrollmentsAsync(Guid userId)
-    {
-        return await context.Enrollments.Where(e => e.UserId == userId).ToListAsync();
-    }
-
     public Task<Course?> GetBasicCourseAsync(Guid courseId)
     {
         return context.Courses
@@ -34,7 +29,6 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
         return context.Courses
             .Include(c => c.Lessons)
             .ThenInclude(l => l.Progresses.Where(p => p.UserId == userId))
-            .AsNoTracking()
             .SingleOrDefaultAsync(c => c.Id == courseId);
     }
 

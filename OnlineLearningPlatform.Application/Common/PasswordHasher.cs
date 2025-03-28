@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace OnlineLearningPlatform.Domain.Utils;
+namespace OnlineLearningPlatform.Application.Common;
 
 public static class PasswordHasher
 {

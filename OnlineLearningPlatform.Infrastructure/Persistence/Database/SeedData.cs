@@ -1,5 +1,5 @@
+using OnlineLearningPlatform.Application.Common;
 using OnlineLearningPlatform.Domain.Entities;
-using OnlineLearningPlatform.Domain.Utils;
 
 namespace OnlineLearningPlatform.Infrastructure.Persistence.Database;
 public class SeedData
