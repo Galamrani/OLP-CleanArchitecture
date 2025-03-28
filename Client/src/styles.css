@@ -1,3 +1,10 @@
+.error-image {
+  text-align: center;
+  margin-top: 1rem;
+  width: 400px;
+  height: 400px;
+}
+
 .toast-top-center {
   top: 10% !important; /* Adjusts vertical position */
   left: 50% !important; /* Centers horizontally */

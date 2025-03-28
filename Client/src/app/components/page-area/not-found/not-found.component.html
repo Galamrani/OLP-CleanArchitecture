@@ -1,65 +1,27 @@
 <div class="error-container">
   <div class="error-content">
     <h1>404</h1>
-    <h2>Page Not Found</h2>
-    <p>The page you are looking for doesn't exist or has been moved.</p>
+    <h2>Not Found</h2>
+    <p>{{ errorMessage }}</p>
+
+    @if (errorDetails) {
+    <div class="error-details">
+      <h3>Error Details:</h3>
+      <p>{{ errorDetails | json }}</p>
+    </div>
+    }
+
     <div class="error-actions">
       <a routerLink="/" class="btn-primary">Go to Home</a>
     </div>
   </div>
+
   <div class="error-image">
     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- Simple document with X mark -->
-      <rect
-        x="50"
-        y="30"
-        width="100"
-        height="140"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="4"
+      <path
+        d="M100 20C55.2 20 20 55.2 20 100s35.2 80 80 80 80-35.2 80-80S144.8 20 100 20zm0 140c-33.1 0-60-26.9-60-60s26.9-60 60-60 60 26.9 60 60-26.9 60-60 60z"
       />
-      <line
-        x1="70"
-        y1="60"
-        x2="130"
-        y2="60"
-        stroke="currentColor"
-        stroke-width="4"
-      />
-      <line
-        x1="70"
-        y1="80"
-        x2="130"
-        y2="80"
-        stroke="currentColor"
-        stroke-width="4"
-      />
-      <line
-        x1="70"
-        y1="100"
-        x2="130"
-        y2="100"
-        stroke="currentColor"
-        stroke-width="4"
-      />
-      <!-- X mark over document -->
-      <line
-        x1="60"
-        y1="50"
-        x2="140"
-        y2="150"
-        stroke="currentColor"
-        stroke-width="6"
-      />
-      <line
-        x1="140"
-        y1="50"
-        x2="60"
-        y2="150"
-        stroke="currentColor"
-        stroke-width="6"
-      />
+      <path d="M70 70v20h20V70H70zm40 0v20h20V70h-20zm-40 40v20h60v-20H70z" />
     </svg>
   </div>
 </div>

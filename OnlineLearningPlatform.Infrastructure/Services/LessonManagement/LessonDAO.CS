@@ -12,6 +12,7 @@ public class LessonDAO(AppDbContext context) : ILessonDAO
     public async Task<Lesson?> GetLessonAsync(Guid userId, Guid lessonId)
     {
         return await context.Lessons
+            .Include(l => l.Course)
             .Include(l => l.Progresses.Where(p => p.UserId == userId))
             .SingleOrDefaultAsync(l => l.Id == lessonId);
     }

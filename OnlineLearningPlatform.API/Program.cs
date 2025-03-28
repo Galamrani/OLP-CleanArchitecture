@@ -1,9 +1,7 @@
-using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using OnlineLearningPlatform.API.Extensions;
 using OnlineLearningPlatform.API.Middlewares;
 using OnlineLearningPlatform.Application.Common;
 using OnlineLearningPlatform.Application.Interfaces;
@@ -20,37 +18,24 @@ using OnlineLearningPlatform.Infrastructure.Services.Persistence;
 using OnlineLearningPlatform.Infrastructure.Services.UserManagement;
 
 var builder = WebApplication.CreateBuilder(args);
-
 {
+    // Configure Serilog for logging
+    builder.AddSerilogLogging();
+
+    // Binds the "JwtSettings" section from apps-settings to the JwtSettings class and registers it to the DI as singleton
+    builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+    // TODO: understand what it does
+    // Adds JWT Bearer authentication and configures token validation parameters
+    builder.Services.AddJwtAuthentication(builder.Configuration);
+
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("DevelopmentCorsPolicy", policy =>
+        options.AddPolicy("LocalDevPolicy", policy =>
             policy.AllowAnyOrigin()
                   .AllowAnyHeader()
                   .AllowAnyMethod());
     });
-
-    builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-    builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer(options =>
-    {
-        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings?.Issuer,
-            ValidAudience = jwtSettings?.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.JwtKey!))
-        };
-    });
-
 
     // Infrastructure
     builder.Services.AddDbContext<AppDbContext>(options =>
@@ -58,6 +43,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"),
         sqlOptions =>
         {
+            // Uses split queries to improve performance
             sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
         });
     });
@@ -66,7 +52,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<ICourseDAO, CourseDAO>();
     builder.Services.AddScoped<ILessonDAO, LessonDAO>();
     builder.Services.AddScoped<IUserDAO, UserDAO>();
-    builder.Services.AddSingleton<ITokenGenerator, TokenGenerator>();
+    builder.Services.AddTransient<ITokenGenerator, TokenGenerator>();
 
     // Application
     builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
@@ -76,11 +62,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IUserService, UserService>();
 
     builder.Services.AddFluentValidationAutoValidation();
-    builder.Services.AddValidatorsFromAssemblyContaining<CourseDtoValidator>();
-    builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
-    builder.Services.AddValidatorsFromAssemblyContaining<LessonDtoValidator>();
-    builder.Services.AddValidatorsFromAssemblyContaining<ProgressDtoValidator>();
-    builder.Services.AddValidatorsFromAssemblyContaining<CredentialsDtoValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<CourseDtoValidator>(); // Scans the assembly containing CourseDtoValidator for all AbstractValidator<T> implementations
 
     builder.Services.AddControllers();
 }
@@ -88,9 +70,9 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 {
-    app.UseCors("DevelopmentCorsPolicy");
-
+    app.UseCors("LocalDevPolicy");
     app.UseMiddleware<ExceptionHandlingMiddleware>();
+    app.UseMiddleware<LoggingMiddleware>();
     app.UseAuthentication();
     app.UseAuthorization();
 

@@ -1,8 +1,8 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, throwError, EMPTY } from 'rxjs';
-import { ErrorUtils } from '../utils/error-utils';
+import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { catchError, throwError, EMPTY } from "rxjs";
+import { ErrorUtils } from "../utils/error-utils";
 
 /**
  * **HTTP Error Interceptor**
@@ -27,48 +27,45 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error) {
-        let shouldStop = false; // Flag to control stopping other interceptors
-
+        let parsedMessage = "";
         switch (error.status) {
           case 400:
-            console.log('Bad Request' + '-->' + ErrorUtils.parseError(error));
-            shouldStop = true;
+            parsedMessage = ErrorUtils.parseError(error);
+            console.log("Bad Request --> " + parsedMessage);
             break;
-
           case 401:
-            console.log('Unauthorized' + ' --> ' + error.message);
-            shouldStop = true;
+            parsedMessage = ErrorUtils.parseError(error);
+            console.log("Unauthorized" + " --> " + parsedMessage);
             break;
-
           case 404:
-            console.log('Not-found' + ' --> ' + error.message);
-            router.navigate(['not-found']);
-            shouldStop = true;
-            break;
-
-          case 500:
-            console.log('Server-error' + ' --> ' + error.message);
-            router.navigate(['server-error'], {
+            router.navigate(["not-found"], {
               state: {
                 errorMessage: error.message,
                 errorDetails: ErrorUtils.parseError(error),
               },
             });
-            shouldStop = true;
-            break;
-
+            return EMPTY;
+          case 500:
+            router.navigate(["server-error"], {
+              state: {
+                errorMessage: error.message,
+                errorDetails: ErrorUtils.parseError(error),
+              },
+            });
+            return EMPTY;
           default:
-            console.log('Unknown error' + ' --> ' + error.message);
-            shouldStop = true;
+            console.log("Unknown error --> " + error.message);
             break;
         }
 
-        if (shouldStop) {
-          return EMPTY;
-        }
+        // Wrap the original error instead of cloning it, and then Re-throw it
+        return throwError(() => ({
+          ...error,
+          parsedMessage,
+        }));
       }
-
-      return throwError(() => error); // Allow error propagation if needed
+      // Re-throw the original
+      return throwError(() => error);
     })
   );
 };

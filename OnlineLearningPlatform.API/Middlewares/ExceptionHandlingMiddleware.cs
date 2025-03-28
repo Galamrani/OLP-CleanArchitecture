@@ -1,8 +1,6 @@
-using System.Net;
-using System.Text.Json;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLearningPlatform.API.utils;
+using Serilog;
 
 namespace OnlineLearningPlatform.API.Middlewares;
 
@@ -10,8 +8,6 @@ namespace OnlineLearningPlatform.API.Middlewares;
 public class ExceptionHandlingMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate next = next;
-
-    // TODO: add logger
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -21,7 +17,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         }
         catch (Exception ex)
         {
-            // logger.LogError(ex, "An unhandled exception occurred.");
+            Log.Error(ex, "An unhandled exception occurred while processing the request.");
             await HandleExceptionAsync(context, ex);
         }
     }

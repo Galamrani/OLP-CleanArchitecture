@@ -39,7 +39,7 @@ public class LessonService(ILessonDAO lessonDAO, IUnitOfWork unitOfWork, IMapper
         Lesson? lesson = await lessonDAO.GetLessonAsync(userId, lessonId);
 
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonId} was not found.");
-        if (!await IsCreatorByCourseId(userId, lesson.CourseId)) throw new UnauthorizedAccessException("You are not allowed to delete this lesson. You are not the creator.");
+        if (lesson.Course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to delete this lesson. You are not the creator.");
 
         await lessonDAO.DeleteLessonAsync(lesson);
         await unitOfWork.SaveChangesAsync();
@@ -50,7 +50,7 @@ public class LessonService(ILessonDAO lessonDAO, IUnitOfWork unitOfWork, IMapper
         Lesson? lesson = await lessonDAO.GetLessonAsync(userId, lessonDto.Id);
 
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonDto.Id} was not found.");
-        if (!await IsCreatorByCourseId(userId, lessonDto.CourseId)) throw new UnauthorizedAccessException("You are not allowed to update this lesson. You are not the creator.");
+        if (lesson.Course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to update this lesson. You are not the creator.");
 
         var existingProgresses = lesson.Progresses;
         mapper.Map(lessonDto, lesson);

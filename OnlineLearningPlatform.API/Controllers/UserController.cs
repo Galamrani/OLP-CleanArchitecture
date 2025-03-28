@@ -11,6 +11,7 @@ namespace OnlineLearningPlatform.API.Controllers;
 public class UserController(IUserService userService, IAuthenticationService authenticationService) : ApiControllerBase
 {
     private readonly IUserService userService = userService;
+    private readonly IAuthenticationService authenticationService = authenticationService;
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)

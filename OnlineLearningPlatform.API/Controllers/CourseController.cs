@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLearningPlatform.Application.DTOs;
 using OnlineLearningPlatform.Application.Services.CourseManagement;
-using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.API.Controllers;
 
