@@ -14,11 +14,11 @@ public class UserDAO(AppDbContext context) : IUserDAO
         return await context.Users.SingleOrDefaultAsync(u => u.Email == email.ToLower());
     }
 
-    public async Task<User> GetUserByIdAsync(Guid userId)
+    public async Task<User?> GetUserByIdAsync(Guid userId)
     {
         return await context.Users
-            .Include(u => u.Enrollments)
-            .SingleAsync(u => u.Id == userId);
+            .Include(u => u.EnrolledCourses)
+            .SingleOrDefaultAsync(u => u.Id == userId);
     }
 
     public async Task AddUserAsync(User user)
@@ -29,5 +29,11 @@ public class UserDAO(AppDbContext context) : IUserDAO
     public async Task<bool> IsEmailTakenAsync(string email)
     {
         return await context.Users.AnyAsync(u => u.Email == email.ToLower());
+    }
+
+    public Task RemoveEnrollment(Enrollment enrollment)
+    {
+        context.Enrollments.Remove(enrollment);
+        return Task.CompletedTask;
     }
 }

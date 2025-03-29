@@ -23,7 +23,7 @@ public class AuthenticationService(ITokenGenerator tokenGenerator, IUserDAO user
 
     public async Task<string> Register(RegisterDto registerDto)
     {
-        if (await userDAO.IsEmailTakenAsync(registerDto.Email)) throw new InvalidOperationException("Email is already in use.");
+        if (await userDAO.IsEmailTakenAsync(registerDto.Email)) throw new ArgumentException("Email is already in use.");
 
         User user = new User
         {

@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 
-### (InvalidOperationException) Unenroll from a course you're not enrolled in
+### (ArgumentException) Unenroll from a course you're not enrolled in
 DELETE  {{url2}}/unenroll/{{courseId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json

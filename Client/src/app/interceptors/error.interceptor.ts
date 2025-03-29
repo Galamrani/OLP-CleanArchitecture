@@ -31,11 +31,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         switch (error.status) {
           case 400:
             parsedMessage = ErrorUtils.parseError(error);
-            console.log("Bad Request --> " + parsedMessage);
             break;
           case 401:
             parsedMessage = ErrorUtils.parseError(error);
-            console.log("Unauthorized" + " --> " + parsedMessage);
             break;
           case 404:
             router.navigate(["not-found"], {
@@ -54,7 +52,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             });
             return EMPTY;
           default:
-            console.log("Unknown error --> " + error.message);
             break;
         }
 

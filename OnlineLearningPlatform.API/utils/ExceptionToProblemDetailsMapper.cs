@@ -18,23 +18,23 @@ public static class ExceptionToProblemDetailsMapper
 
     private static int GetStatusCode(Exception exception) => exception switch
     {
+        ArgumentException => StatusCodes.Status400BadRequest,
         UnauthorizedAccessException => StatusCodes.Status403Forbidden,
-        InvalidOperationException => StatusCodes.Status400BadRequest,
         KeyNotFoundException => StatusCodes.Status404NotFound,
         _ => StatusCodes.Status500InternalServerError
     };
 
     private static string GetProblemType(Exception exception) => exception switch
     {
-        InvalidOperationException => "https://tools.ietf.org/html/rfc9110#section-15.5.1",
-        UnauthorizedAccessException => "https://tools.ietf.org/html/rfc9110#section-15.5.4",
-        KeyNotFoundException => "https://tools.ietf.org/html/rfc9110#section-15.5.5",
-        _ => "https://tools.ietf.org/html/rfc9110#section-15.6.1"
+        ArgumentException => "https://datatracker.ietf.org/doc/html/rfc9110#name-400-bad-request",
+        UnauthorizedAccessException => "https://datatracker.ietf.org/doc/html/rfc9110#name-403-forbidden",
+        KeyNotFoundException => "https://datatracker.ietf.org/doc/html/rfc9110#name-404-not-found",
+        _ => "https://datatracker.ietf.org/doc/html/rfc9110#name-500-internal-server-error"
     };
 
     private static string GetTitle(Exception exception) => exception switch
     {
-        InvalidOperationException => "Invalid Operation",
+        ArgumentException => "Invalid Request Parameter",
         UnauthorizedAccessException => "Access Denied",
         KeyNotFoundException => "Resource Not Found",
         _ => "Internal Server Error"

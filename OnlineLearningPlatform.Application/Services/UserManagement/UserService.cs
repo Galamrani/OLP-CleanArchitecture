@@ -13,32 +13,25 @@ public class UserService(IUserDAO userDAO, ICourseDAO courseDAO, IUnitOfWork uni
 
     public async Task<CourseDto> EnrollToCourseAsync(Guid userId, Guid courseId)
     {
-        User user = await userDAO.GetUserByIdAsync(userId);
-        if (user.Enrollments.Any(e => e.CourseId == courseId)) throw new InvalidOperationException("User is already enrolled in this course.");
+        User? user = await userDAO.GetUserByIdAsync(userId);
+        if (user is null) throw new KeyNotFoundException($"User with ID {userId} was not found.");
 
         Course? course = await courseDAO.GetBasicCourseAsync(courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
-        Enrollment enrollment = new Enrollment
-        {
-            UserId = userId,
-            CourseId = courseId
-        };
+        user.Enroll(courseId);
 
-        user.Enrollments.Add(enrollment);
         await unitOfWork.SaveChangesAsync();
-
         return mapper.Map<CourseDto>(course);
     }
 
     public async Task UnenrollToCourseAsync(Guid userId, Guid courseId)
     {
-        User user = await userDAO.GetUserByIdAsync(userId);
-        Enrollment? enrollment = user.Enrollments.FirstOrDefault(e => e.CourseId == courseId);
+        User? user = await userDAO.GetUserByIdAsync(userId);
+        if (user is null) throw new KeyNotFoundException($"User with ID {userId} was not found.");
 
-        if (enrollment is null) throw new InvalidOperationException("User is not enrolled to this course.");
-
-        user.Enrollments.Remove(enrollment);
+        Enrollment enrollment = user.RemoveEnrollment(courseId);
+        await userDAO.RemoveEnrollment(enrollment);
         await unitOfWork.SaveChangesAsync();
     }
 }

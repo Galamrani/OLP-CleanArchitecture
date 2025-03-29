@@ -86,47 +86,47 @@ public class AppDbContext : DbContext
 
     private void ConfigureRelationships(ModelBuilder modelBuilder)
     {
-        // User -> Course (Creator)
+        // User (parent) → Created Courses (child)
         modelBuilder.Entity<Course>()
             .HasOne(c => c.Creator)
             .WithMany(u => u.CreatedCourses)
             .HasForeignKey(c => c.CreatorId)
-            .OnDelete(DeleteBehavior.Restrict); // Prevent cascade deletion of courses when deleting a user
+            .OnDelete(DeleteBehavior.Cascade); // CreatedCourses cascade from user 
 
-        // Course -> Lesson
-        modelBuilder.Entity<Lesson>()
-            .HasOne(l => l.Course)
-            .WithMany(c => c.Lessons)
-            .HasForeignKey(l => l.CourseId)
-            .OnDelete(DeleteBehavior.Cascade); // Deleting a course deletes its lessons
-
-        // Course -> Enrollment
-        modelBuilder.Entity<Enrollment>()
-            .HasOne(e => e.Course)
-            .WithMany(c => c.Enrollments)
-            .HasForeignKey(e => e.CourseId)
-            .OnDelete(DeleteBehavior.Cascade); // Deleting a course deletes enrollments
-
-        // User -> Enrollment
+        // User (parent) → Enrollments (child)
         modelBuilder.Entity<Enrollment>()
             .HasOne(e => e.User)
-            .WithMany(u => u.Enrollments)
+            .WithMany(u => u.EnrolledCourses)
             .HasForeignKey(e => e.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Deleting a user deletes their enrollments
+            .OnDelete(DeleteBehavior.NoAction); // Deleted manually in Domain layer (user.Unenroll) and App layer (userService.UnenrollToCourseAsync)
 
-        // Lesson -> Progress
-        modelBuilder.Entity<Progress>()
-            .HasOne(p => p.Lesson)
-            .WithMany(l => l.Progresses)
-            .HasForeignKey(p => p.LessonId)
-            .OnDelete(DeleteBehavior.Cascade); // Deleting a lesson deletes progress
-
-        // User -> Progress
+        // User (parent) → Progress (child)
         modelBuilder.Entity<Progress>()
             .HasOne(p => p.User)
             .WithMany(u => u.Progresses)
             .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Deleting a user deletes progress
+            .OnDelete(DeleteBehavior.NoAction); // Progresses NoAction from user - i don't want to delete progresses from user
+
+        // Course (parent) → Lessons (child)
+        modelBuilder.Entity<Lesson>()
+            .HasOne(l => l.Course)
+            .WithMany(c => c.Lessons)
+            .HasForeignKey(l => l.CourseId)
+            .OnDelete(DeleteBehavior.Cascade); // Lessons cascade from course 
+
+        // Course (parent) → Enrollments (child)
+        modelBuilder.Entity<Enrollment>()
+            .HasOne(e => e.Course)
+            .WithMany(c => c.Enrollments)
+            .HasForeignKey(e => e.CourseId)
+            .OnDelete(DeleteBehavior.Cascade); // Enrollments cascade from course 
+
+        // Lesson (parent) → Progress (child)
+        modelBuilder.Entity<Progress>()
+            .HasOne(p => p.Lesson)
+            .WithMany(l => l.Progresses)
+            .HasForeignKey(p => p.LessonId)
+            .OnDelete(DeleteBehavior.Cascade); // Progresses cascade from lesson 
     }
 
     private void SeedInitialData(ModelBuilder modelBuilder)

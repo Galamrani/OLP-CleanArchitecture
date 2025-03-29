@@ -25,20 +25,4 @@ public class LessonDAO(AppDbContext context) : ILessonDAO
             .Select(c => c.CreatorId)
             .FirstOrDefaultAsync();
     }
-
-    public async Task AddLessonAsync(Lesson lesson)
-    {
-        await context.Lessons.AddAsync(lesson);
-    }
-
-    public async Task AddProgressAsync(Progress progress)
-    {
-        await context.Progresses.AddAsync(progress);
-    }
-
-    public Task DeleteLessonAsync(Lesson lesson)
-    {
-        context.Lessons.Remove(lesson);
-        return Task.CompletedTask;
-    }
 }

@@ -7,8 +7,4 @@ public interface ILessonDAO
 {
     Task<Lesson?> GetLessonAsync(Guid userId, Guid lessonId);
     Task<Guid> GetLessonCreatorIdAsync(Guid courseId);
-    Task AddLessonAsync(Lesson lesson);
-    Task AddProgressAsync(Progress progress);
-    Task DeleteLessonAsync(Lesson lesson);
-
 }

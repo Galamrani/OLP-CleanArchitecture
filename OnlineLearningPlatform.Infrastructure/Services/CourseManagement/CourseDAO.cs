@@ -49,15 +49,4 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
             .AsNoTracking()
             .ToListAsync();
     }
-
-    public async Task AddCourseAsync(Course course)
-    {
-        await context.Courses.AddAsync(course);
-    }
-
-    public Task DeleteCourseAsync(Course course)
-    {
-        context.Courses.Remove(course);
-        return Task.CompletedTask;
-    }
 }
