@@ -14,7 +14,7 @@ public class LessonService(ILessonDAO lessonDAO, ICourseDAO courseDAO, IUnitOfWo
 
     public async Task<LessonDto> AddLessonAsync(Guid userId, LessonDto lessonDto)
     {
-        Course? course = await courseDAO.GetBasicCourseAsync(lessonDto.CourseId);
+        Course? course = await courseDAO.GetCourseWithLessonsAsync(lessonDto.CourseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {lessonDto.CourseId} was not found.");
 
         Lesson lesson = mapper.Map<Lesson>(lessonDto);
@@ -43,7 +43,7 @@ public class LessonService(ILessonDAO lessonDAO, ICourseDAO courseDAO, IUnitOfWo
         Lesson? lesson = await lessonDAO.GetLessonAsync(userId, lessonId);
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonId} was not found.");
 
-        Course? course = await courseDAO.GetBasicCourseAsync(lesson.CourseId);
+        Course? course = await courseDAO.GetCourseWithLessonsAsync(lesson.CourseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {lesson.CourseId} was not found.");
 
         course.DeleteLesson(userId, lesson);

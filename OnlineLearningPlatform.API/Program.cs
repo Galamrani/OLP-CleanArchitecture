@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineLearningPlatform.API.Extensions;
 using OnlineLearningPlatform.API.Middlewares;
 using OnlineLearningPlatform.Application.Common;
+using OnlineLearningPlatform.Application.Configurations;
 using OnlineLearningPlatform.Application.Interfaces;
 using OnlineLearningPlatform.Application.Services.Authentication;
 using OnlineLearningPlatform.Application.Services.CourseManagement;

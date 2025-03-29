@@ -6,5 +6,4 @@ namespace OnlineLearningPlatform.Application.Interfaces;
 public interface ILessonDAO
 {
     Task<Lesson?> GetLessonAsync(Guid userId, Guid lessonId);
-    Task<Guid> GetLessonCreatorIdAsync(Guid courseId);
 }

@@ -16,13 +16,4 @@ public class LessonDAO(AppDbContext context) : ILessonDAO
             .Include(l => l.Progresses.Where(p => p.UserId == userId))
             .SingleOrDefaultAsync(l => l.Id == lessonId);
     }
-
-    public async Task<Guid> GetLessonCreatorIdAsync(Guid courseId)
-    {
-        return await context.Courses
-            .Where(c => c.Id == courseId)
-            .AsNoTracking()
-            .Select(c => c.CreatorId)
-            .FirstOrDefaultAsync();
-    }
 }

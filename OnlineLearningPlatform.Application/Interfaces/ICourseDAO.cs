@@ -5,8 +5,8 @@ namespace OnlineLearningPlatform.Application.Interfaces;
 
 public interface ICourseDAO
 {
-    Task<Course?> GetFullCourseAsync(Guid userId, Guid courseId);
-    Task<Course?> GetBasicCourseAsync(Guid courseId);
+    Task<Course?> GetCourseWithUserLessonProgressAsync(Guid userId, Guid courseId);
+    Task<Course?> GetCourseWithLessonsAsync(Guid courseId);
     Task<List<Course>> GetCoursesAsync();
     Task<List<Course>> GetUserCreatedCoursesAsync(Guid userId);
     Task<List<Course>> GetUserEnrolledCoursesAsync(Guid userId);

@@ -12,17 +12,17 @@ public class CourseService(ICourseDAO courseDAO, IUserDAO userDAO, IUnitOfWork u
     private readonly IUnitOfWork unitOfWork = unitOfWork;
     private readonly IMapper mapper = mapper;
 
-    public async Task<CourseDto> GetBasicCourseAsync(Guid courseId)
+    public async Task<CourseDto> GetCourseWithLessonsAsync(Guid courseId)
     {
-        Course? course = await courseDAO.GetBasicCourseAsync(courseId);
+        Course? course = await courseDAO.GetCourseWithLessonsAsync(courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         return mapper.Map<CourseDto>(course);
     }
 
-    public async Task<CourseDto> GetFullCourseAsync(Guid userId, Guid courseId)
+    public async Task<CourseDto> GetCourseWithUserLessonProgressAsync(Guid userId, Guid courseId)
     {
-        Course? course = await courseDAO.GetFullCourseAsync(userId, courseId);
+        Course? course = await courseDAO.GetCourseWithUserLessonProgressAsync(userId, courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         return mapper.Map<CourseDto>(course);
@@ -48,10 +48,10 @@ public class CourseService(ICourseDAO courseDAO, IUserDAO userDAO, IUnitOfWork u
 
     public async Task<CourseDto> AddCourseAsync(CourseDto courseDto)
     {
-        User? creator = await userDAO.GetUserByIdAsync(courseDto.CreatorId);
-        if (creator is null) throw new KeyNotFoundException($"User with ID {courseDto.CreatorId} was not found.");
+        User? user = await userDAO.GetUserByIdAsync(courseDto.CreatorId);
+        if (user is null) throw new KeyNotFoundException($"User with ID {courseDto.CreatorId} was not found.");
 
-        Course course = creator.CreateCourse(courseDto.Title, courseDto.Description);
+        Course course = user.CreateCourse(courseDto.Title, courseDto.Description);
 
         await unitOfWork.SaveChangesAsync();
         return mapper.Map<CourseDto>(course);
@@ -62,7 +62,7 @@ public class CourseService(ICourseDAO courseDAO, IUserDAO userDAO, IUnitOfWork u
         User? user = await userDAO.GetUserByIdAsync(userId);
         if (user is null) throw new KeyNotFoundException($"User with ID {userId} was not found.");
 
-        Course? course = await courseDAO.GetBasicCourseAsync(courseId);
+        Course? course = await courseDAO.GetCourseWithLessonsAsync(courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         user.DeleteCourse(course);
@@ -71,7 +71,7 @@ public class CourseService(ICourseDAO courseDAO, IUserDAO userDAO, IUnitOfWork u
 
     public async Task<CourseDto> UpdateCourseAsync(Guid userId, CourseDto courseDto)
     {
-        Course? course = await courseDAO.GetFullCourseAsync(userId, courseDto.Id);
+        Course? course = await courseDAO.GetCourseWithUserLessonProgressAsync(userId, courseDto.Id);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseDto.Id} was not found.");
 
         course.Update(userId, courseDto.Title, courseDto.Description);

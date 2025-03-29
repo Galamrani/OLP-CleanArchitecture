@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using OnlineLearningPlatform.Infrastructure.Services.Authentication;
+using OnlineLearningPlatform.Application.Configurations;
 
 namespace OnlineLearningPlatform.API.Extensions;
 

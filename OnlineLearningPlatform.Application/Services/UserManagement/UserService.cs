@@ -16,7 +16,7 @@ public class UserService(IUserDAO userDAO, ICourseDAO courseDAO, IUnitOfWork uni
         User? user = await userDAO.GetUserByIdAsync(userId);
         if (user is null) throw new KeyNotFoundException($"User with ID {userId} was not found.");
 
-        Course? course = await courseDAO.GetBasicCourseAsync(courseId);
+        Course? course = await courseDAO.GetCourseWithLessonsAsync(courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         user.Enroll(courseId);

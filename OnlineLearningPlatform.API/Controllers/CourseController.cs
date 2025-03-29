@@ -23,7 +23,7 @@ public class CourseController(ICourseService courseService) : ApiControllerBase
     public async Task<IActionResult> GetBasicCourse(Guid courseId)
     {
         // Retrieves a basic course including its lessons Only! and NO! user's progress.
-        CourseDto course = await courseService.GetBasicCourseAsync(courseId);
+        CourseDto course = await courseService.GetCourseWithLessonsAsync(courseId);
         return Ok(course);
     }
 
@@ -31,7 +31,7 @@ public class CourseController(ICourseService courseService) : ApiControllerBase
     public async Task<IActionResult> GetFullCourse(Guid courseId)
     {
         // Retrieves a full course including its lessons and the current user's progress.
-        CourseDto course = await courseService.GetFullCourseAsync(GetUserId(HttpContext), courseId);
+        CourseDto course = await courseService.GetCourseWithUserLessonProgressAsync(GetUserId(HttpContext), courseId);
         return Ok(course);
     }
 

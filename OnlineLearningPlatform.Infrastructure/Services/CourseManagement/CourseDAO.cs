@@ -17,14 +17,14 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
             .ToListAsync();
     }
 
-    public Task<Course?> GetBasicCourseAsync(Guid courseId)
+    public Task<Course?> GetCourseWithLessonsAsync(Guid courseId)
     {
         return context.Courses
             .Include(c => c.Lessons)
             .SingleOrDefaultAsync(c => c.Id == courseId);
     }
 
-    public Task<Course?> GetFullCourseAsync(Guid userId, Guid courseId)
+    public Task<Course?> GetCourseWithUserLessonProgressAsync(Guid userId, Guid courseId)
     {
         return context.Courses
             .Include(c => c.Lessons)
