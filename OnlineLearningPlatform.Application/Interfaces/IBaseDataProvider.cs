@@ -1,6 +1,6 @@
 namespace OnlineLearningPlatform.Application.Interfaces;
 
-public interface IUnitOfWork
+public interface IBaseDataService
 {
     Task SaveChangesAsync();
 }

@@ -91,6 +91,7 @@ export class CourseStore {
     if (!course.id) return;
 
     if (this._enrolledCourses.has(course.id)) {
+      // TODO: need to save progresses, and give course the saved progresses, because course (updated course) do'nt have progresses
       this._enrolledCourses.set(course.id, course);
       this.saveToStorage(
         CoursesStorageKey.EnrolledCourses,

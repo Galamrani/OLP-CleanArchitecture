@@ -12,7 +12,6 @@ using OnlineLearningPlatform.Application.Services.LessonManagement;
 using OnlineLearningPlatform.Application.Services.UserManagement;
 using OnlineLearningPlatform.Application.Validators;
 using OnlineLearningPlatform.Infrastructure.Persistence.Database;
-using OnlineLearningPlatform.Infrastructure.Services.Authentication;
 using OnlineLearningPlatform.Infrastructure.Services.CourseManagement;
 using OnlineLearningPlatform.Infrastructure.Services.LessonManagement;
 using OnlineLearningPlatform.Infrastructure.Services.Persistence;
@@ -26,8 +25,8 @@ var builder = WebApplication.CreateBuilder(args);
     // Binds the "JwtSettings" section from apps-settings to the JwtSettings class and registers it to the DI as singleton
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-    // TODO: understand what it does
     // Adds JWT Bearer authentication and configures token validation parameters
+    // Sets up how the app should authenticate and validate JWT tokens
     builder.Services.AddJwtAuthentication(builder.Configuration);
 
     builder.Services.AddCors(options =>
@@ -49,11 +48,10 @@ var builder = WebApplication.CreateBuilder(args);
         });
     });
 
-    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-    builder.Services.AddScoped<ICourseDAO, CourseDAO>();
-    builder.Services.AddScoped<ILessonDAO, LessonDAO>();
-    builder.Services.AddScoped<IUserDAO, UserDAO>();
-    builder.Services.AddTransient<ITokenGenerator, TokenGenerator>();
+    builder.Services.AddScoped<IBaseDataService, BaseDataService>();
+    builder.Services.AddScoped<ICourseDataService, CourseDataService>();
+    builder.Services.AddScoped<ILessonDataService, LessonDataService>();
+    builder.Services.AddScoped<IUserDataService, UserDataService>();
 
     // Application
     builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
@@ -74,7 +72,9 @@ var app = builder.Build();
     app.UseCors("LocalDevPolicy");
     app.UseMiddleware<ExceptionHandlingMiddleware>();
     app.UseMiddleware<LoggingMiddleware>();
+    // Checks if the request has a valid authentication token (e.g., JWT).
     app.UseAuthentication();
+    // After a user is authenticated, it decides whether they’re allowed to access the endpoint.
     app.UseAuthorization();
 
     app.MapControllers();

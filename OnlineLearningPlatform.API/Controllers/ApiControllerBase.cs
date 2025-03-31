@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace OnlineLearningPlatform.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1")]
 public class ApiControllerBase : ControllerBase
 {
     protected Guid GetUserId(HttpContext context)

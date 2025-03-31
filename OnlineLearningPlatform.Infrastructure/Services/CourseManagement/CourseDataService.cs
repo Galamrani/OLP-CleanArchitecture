@@ -2,31 +2,31 @@ using Microsoft.EntityFrameworkCore;
 using OnlineLearningPlatform.Application.Interfaces;
 using OnlineLearningPlatform.Domain.Entities;
 using OnlineLearningPlatform.Infrastructure.Persistence.Database;
+using OnlineLearningPlatform.Infrastructure.Services.Persistence;
 
 namespace OnlineLearningPlatform.Infrastructure.Services.CourseManagement;
 
-public class CourseDAO(AppDbContext context) : ICourseDAO
+public class CourseDataService : BaseDataService, ICourseDataService
 {
-    private readonly AppDbContext context = context;
+    public CourseDataService(AppDbContext context) : base(context) { }
 
     public async Task<List<Course>> GetCoursesAsync()
     {
         return await context.Courses
-            .Include(c => c.Lessons)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public Task<Course?> GetCourseWithLessonsAsync(Guid courseId)
+    public async Task<Course?> GetCourseAsync(Guid courseId)
     {
-        return context.Courses
+        return await context.Courses
             .Include(c => c.Lessons)
             .SingleOrDefaultAsync(c => c.Id == courseId);
     }
 
-    public Task<Course?> GetCourseWithUserLessonProgressAsync(Guid userId, Guid courseId)
+    public async Task<Course?> GetEnrolledCourseWithProgressAsync(Guid userId, Guid courseId)
     {
-        return context.Courses
+        return await context.Courses
             .Include(c => c.Lessons)
             .ThenInclude(l => l.Progresses.Where(p => p.UserId == userId))
             .SingleOrDefaultAsync(c => c.Id == courseId);
@@ -36,7 +36,6 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
     {
         return await context.Courses
             .Where(c => c.CreatorId == userId)
-            .Include(c => c.Lessons)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -45,8 +44,18 @@ public class CourseDAO(AppDbContext context) : ICourseDAO
     {
         return await context.Courses
             .Where(c => c.Enrollments.Any(e => e.UserId == userId))
-            .Include(c => c.Lessons)
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task AddCourseAsync(Course course)
+    {
+        await context.Courses.AddAsync(course);
+    }
+
+    public Task DeleteCourseAsync(Course course)
+    {
+        context.Courses.Remove(course);
+        return Task.CompletedTask;
     }
 }

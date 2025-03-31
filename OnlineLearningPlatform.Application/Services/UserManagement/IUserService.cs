@@ -4,6 +4,10 @@ namespace OnlineLearningPlatform.Application.Services.UserManagement;
 
 public interface IUserService
 {
-    Task<CourseDto> EnrollToCourseAsync(Guid userId, Guid courseId);
-    Task UnenrollToCourseAsync(Guid userId, Guid courseId);
+    Task<List<CourseDto>> GetUserCreatedCoursesAsync(Guid userId);
+    Task<List<CourseDto>> GetUserEnrolledCoursesAsync(Guid userId);
+    Task<CourseDto> GetEnrolledCourseWithProgressAsync(Guid userId, Guid courseId);
+
+    Task<CourseDto> CreateEnrollmentAsync(Guid userId, Guid courseId);
+    Task DeleteEnrollmentAsync(Guid userId, Guid courseId);
 }

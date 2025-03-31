@@ -3,9 +3,9 @@ using OnlineLearningPlatform.Infrastructure.Persistence.Database;
 
 namespace OnlineLearningPlatform.Infrastructure.Services.Persistence;
 
-public class UnitOfWork(AppDbContext context) : IUnitOfWork
+public abstract class BaseDataService(AppDbContext context) : IBaseDataService
 {
-    private readonly AppDbContext context = context;
+    protected readonly AppDbContext context = context;
 
     public async Task SaveChangesAsync()
     {

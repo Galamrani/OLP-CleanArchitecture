@@ -5,59 +5,62 @@ using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.Application.Services.LessonManagement;
 
-public class LessonService(ILessonDAO lessonDAO, ICourseDAO courseDAO, IUnitOfWork unitOfWork, IMapper mapper) : ILessonService
+public class LessonService(ILessonDataService lessonDataService, ICourseDataService courseDataService, IMapper mapper) : ILessonService
 {
-    private readonly ILessonDAO lessonDAO = lessonDAO;
-    private readonly ICourseDAO courseDAO = courseDAO;
-    private readonly IUnitOfWork unitOfWork = unitOfWork;
+    private readonly ILessonDataService lessonDataService = lessonDataService;
+    private readonly ICourseDataService courseDataService = courseDataService;
+
     private readonly IMapper mapper = mapper;
 
     public async Task<LessonDto> AddLessonAsync(Guid userId, LessonDto lessonDto)
     {
-        Course? course = await courseDAO.GetCourseWithLessonsAsync(lessonDto.CourseId);
+        Course? course = await courseDataService.GetCourseAsync(lessonDto.CourseId);
+
         if (course is null) throw new KeyNotFoundException($"Course with ID {lessonDto.CourseId} was not found.");
+        if (course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to add lesson. You are not the creator.");
 
         Lesson lesson = mapper.Map<Lesson>(lessonDto);
+        await lessonDataService.AddLesson(lesson);
 
-        course.AddLesson(userId, lesson);
-
-        await unitOfWork.SaveChangesAsync();
+        await courseDataService.SaveChangesAsync();
         return mapper.Map<LessonDto>(lesson);
-    }
-
-    public async Task<ProgressDto> AddProgressAsync(ProgressDto progressDto)
-    {
-        Lesson? lesson = await lessonDAO.GetLessonAsync(progressDto.UserId, progressDto.LessonId);
-        if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {progressDto.LessonId} was not found.");
-
-        Progress progress = mapper.Map<Progress>(progressDto);
-
-        lesson.AddProgress(progress);
-
-        await unitOfWork.SaveChangesAsync();
-        return mapper.Map<ProgressDto>(progress);
     }
 
     public async Task DeleteLessonAsync(Guid userId, Guid lessonId)
     {
-        Lesson? lesson = await lessonDAO.GetLessonAsync(userId, lessonId);
+        Lesson? lesson = await lessonDataService.GetLessonAsync(userId, lessonId);
+
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonId} was not found.");
+        if (lesson.Course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to delete this lesson. You are not the creator.");
 
-        Course? course = await courseDAO.GetCourseWithLessonsAsync(lesson.CourseId);
-        if (course is null) throw new KeyNotFoundException($"Course with ID {lesson.CourseId} was not found.");
-
-        course.DeleteLesson(userId, lesson);
-        await unitOfWork.SaveChangesAsync();
+        await lessonDataService.DeleteLesson(lesson);
+        await lessonDataService.SaveChangesAsync();
     }
 
     public async Task<LessonDto> UpdateLessonAsync(Guid userId, LessonDto lessonDto)
     {
-        Lesson? lesson = await lessonDAO.GetLessonAsync(userId, lessonDto.Id);
+        Lesson? lesson = await lessonDataService.GetLessonAsync(userId, lessonDto.Id);
+
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {lessonDto.Id} was not found.");
+        if (lesson.Course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to update this lesson. You are not the creator.");
 
-        lesson.Update(userId, lessonDto.Title, lessonDto.Description, lessonDto.VideoUrl);
+        lesson.Title = lessonDto.Title;
+        lesson.Description = lessonDto.Description;
+        lesson.VideoUrl = lessonDto.VideoUrl;
 
-        await unitOfWork.SaveChangesAsync();
+        await lessonDataService.SaveChangesAsync();
         return mapper.Map<LessonDto>(lesson);
+    }
+
+    public async Task<ProgressDto> AddLessonProgressAsync(ProgressDto progressDto)
+    {
+        Lesson? lesson = await lessonDataService.GetLessonAsync(progressDto.UserId, progressDto.LessonId);
+        if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {progressDto.LessonId} was not found.");
+
+        Progress progress = mapper.Map<Progress>(progressDto);
+        await lessonDataService.AddProgressAsync(progress);
+
+        await lessonDataService.SaveChangesAsync();
+        return mapper.Map<ProgressDto>(progress);
     }
 }

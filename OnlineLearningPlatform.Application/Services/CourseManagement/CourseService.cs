@@ -5,78 +5,55 @@ using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.Application.Services.CourseManagement;
 
-public class CourseService(ICourseDAO courseDAO, IUserDAO userDAO, IUnitOfWork unitOfWork, IMapper mapper) : ICourseService
+public class CourseService(ICourseDataService courseDataService, IUserDataService userDataService, IMapper mapper) : ICourseService
 {
-    private readonly ICourseDAO courseDAO = courseDAO;
-    private readonly IUserDAO userDAO = userDAO;
-    private readonly IUnitOfWork unitOfWork = unitOfWork;
+    private readonly ICourseDataService courseDataService = courseDataService;
+    private readonly IUserDataService userDataService = userDataService;
     private readonly IMapper mapper = mapper;
-
-    public async Task<CourseDto> GetCourseWithLessonsAsync(Guid courseId)
-    {
-        Course? course = await courseDAO.GetCourseWithLessonsAsync(courseId);
-        if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
-
-        return mapper.Map<CourseDto>(course);
-    }
-
-    public async Task<CourseDto> GetCourseWithUserLessonProgressAsync(Guid userId, Guid courseId)
-    {
-        Course? course = await courseDAO.GetCourseWithUserLessonProgressAsync(userId, courseId);
-        if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
-
-        return mapper.Map<CourseDto>(course);
-    }
 
     public async Task<List<CourseDto>> GetCoursesAsync()
     {
-        List<Course> courses = await courseDAO.GetCoursesAsync();
+        List<Course> courses = await courseDataService.GetCoursesAsync();
         return mapper.Map<List<CourseDto>>(courses);
     }
 
-    public async Task<List<CourseDto>> GetUserCreatedCoursesAsync(Guid userId)
+    public async Task<CourseDto> GetCourseAsync(Guid courseId)
     {
-        List<Course> courses = await courseDAO.GetUserCreatedCoursesAsync(userId);
-        return mapper.Map<List<CourseDto>>(courses);
-    }
+        Course? course = await courseDataService.GetCourseAsync(courseId);
+        if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
-    public async Task<List<CourseDto>> GetUserEnrolledCoursesAsync(Guid userId)
-    {
-        List<Course> courses = await courseDAO.GetUserEnrolledCoursesAsync(userId);
-        return mapper.Map<List<CourseDto>>(courses);
+        return mapper.Map<CourseDto>(course);
     }
 
     public async Task<CourseDto> AddCourseAsync(CourseDto courseDto)
     {
-        User? user = await userDAO.GetUserByIdAsync(courseDto.CreatorId);
-        if (user is null) throw new KeyNotFoundException($"User with ID {courseDto.CreatorId} was not found.");
+        Course course = mapper.Map<Course>(courseDto);
+        await courseDataService.AddCourseAsync(course);
 
-        Course course = user.CreateCourse(courseDto.Title, courseDto.Description);
-
-        await unitOfWork.SaveChangesAsync();
+        await userDataService.SaveChangesAsync();
         return mapper.Map<CourseDto>(course);
     }
 
     public async Task DeleteCourseAsync(Guid userId, Guid courseId)
     {
-        User? user = await userDAO.GetUserByIdAsync(userId);
-        if (user is null) throw new KeyNotFoundException($"User with ID {userId} was not found.");
-
-        Course? course = await courseDAO.GetCourseWithLessonsAsync(courseId);
+        Course? course = await courseDataService.GetCourseAsync(courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
-        user.DeleteCourse(course);
-        await unitOfWork.SaveChangesAsync();
+        await courseDataService.DeleteCourseAsync(course);
+        await userDataService.SaveChangesAsync();
     }
 
     public async Task<CourseDto> UpdateCourseAsync(Guid userId, CourseDto courseDto)
     {
-        Course? course = await courseDAO.GetCourseWithUserLessonProgressAsync(userId, courseDto.Id);
+        Course? course = await courseDataService.GetCourseAsync(courseDto.Id);
+
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseDto.Id} was not found.");
+        if (course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to delete lesson from this course. You are not the creator."); course.Title = courseDto.Title;
 
-        course.Update(userId, courseDto.Title, courseDto.Description);
+        course.Title = courseDto.Title;
+        course.Description = courseDto.Description;
 
-        await unitOfWork.SaveChangesAsync();
+        await courseDataService.SaveChangesAsync();
         return mapper.Map<CourseDto>(course);
     }
 }

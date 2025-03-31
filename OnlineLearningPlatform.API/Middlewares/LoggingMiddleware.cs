@@ -2,11 +2,9 @@ using Serilog;
 
 namespace OnlineLearningPlatform.API.Middlewares;
 
-public class LoggingMiddleware
+public class LoggingMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public LoggingMiddleware(RequestDelegate next) => _next = next;
+    private readonly RequestDelegate next = next;
 
     public async Task Invoke(HttpContext context)
     {
@@ -15,7 +13,7 @@ public class LoggingMiddleware
              context.Request.Path,
              context.Connection.RemoteIpAddress);
 
-        await _next(context);
+        await next(context);
 
         Log.Information("Response: {StatusCode} for {Method} {Path}",
             context.Response.StatusCode,

@@ -31,7 +31,7 @@ import { LessonApiService } from "./lesson-api.service";
  * **Why Use This Facade?**
  * - Avoids **duplicate API calls** by caching data.
  * - Ensures **state consistency** between API and UI.
- * - Provides a **single source** for courses.
+ * - Provides a **single source**.
  */
 
 @Injectable({
@@ -160,6 +160,7 @@ export class CourseManagerService {
       case CourseViewType.Instructor:
         const cachedCourse = this.courseStore.getCreatedCourseById(courseId);
         if (cachedCourse) return of(cachedCourse); // Wrap the existing course in an Observable
+        // TODO: need to store in the cache like is student
         return this.courseApiService.getFullCourseDetails(courseId);
 
       default:

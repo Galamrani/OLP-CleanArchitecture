@@ -6,6 +6,6 @@ public class Enrollment
     public Guid UserId { get; set; }
     public Guid CourseId { get; set; }
     public DateTime EnrolledAt { get; set; }
-    public User User { get; set; } = null!;
-    public Course Course { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
+    public virtual Course Course { get; set; } = null!;
 }

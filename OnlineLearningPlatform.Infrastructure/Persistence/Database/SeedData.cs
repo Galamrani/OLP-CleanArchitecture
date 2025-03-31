@@ -11,25 +11,25 @@ public class SeedData
         _guids = new Dictionary<string, Guid>
         {
             // Users
-            ["user1"] = Guid.NewGuid(),
-            ["user2"] = Guid.NewGuid(),
-            ["user3"] = Guid.NewGuid(),
+            ["user1"] = new Guid("11111111-1111-1111-1111-111111111111"),
+            ["user2"] = new Guid("22222222-2222-2222-2222-222222222222"),
+            ["user3"] = new Guid("33333333-3333-3333-3333-333333333333"),
 
             // Courses
-            ["course1"] = Guid.NewGuid(),
-            ["course2"] = Guid.NewGuid(),
-            ["course3"] = Guid.NewGuid(),
-            ["course4"] = Guid.NewGuid(),
+            ["course1"] = new Guid("a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1"),
+            ["course2"] = new Guid("a2a2a2a2-a2a2-a2a2-a2a2-a2a2a2a2a2a2"),
+            ["course3"] = new Guid("a3a3a3a3-a3a3-a3a3-a3a3-a3a3a3a3a3a3"),
+            ["course4"] = new Guid("a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4"),
 
             // Lessons
-            ["lesson1"] = Guid.NewGuid(),
-            ["lesson2"] = Guid.NewGuid(),
-            ["lesson3"] = Guid.NewGuid(),
-            ["lesson4"] = Guid.NewGuid(),
-            ["lesson5"] = Guid.NewGuid(),
-            ["lesson6"] = Guid.NewGuid(),
-            ["lesson7"] = Guid.NewGuid(),
-            ["lesson8"] = Guid.NewGuid()
+            ["lesson1"] = new Guid("b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1"),
+            ["lesson2"] = new Guid("b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2"),
+            ["lesson3"] = new Guid("b3b3b3b3-b3b3-b3b3-b3b3-b3b3b3b3b3b3"),
+            ["lesson4"] = new Guid("b4b4b4b4-b4b4-b4b4-b4b4-b4b4b4b4b4b4"),
+            ["lesson5"] = new Guid("b5b5b5b5-b5b5-b5b5-b5b5-b5b5b5b5b5b5"),
+            ["lesson6"] = new Guid("b6b6b6b6-b6b6-b6b6-b6b6-b6b6b6b6b6b6"),
+            ["lesson7"] = new Guid("b7b7b7b7-b7b7-b7b7-b7b7-b7b7b7b7b7b7"),
+            ["lesson8"] = new Guid("b8b8b8b8-b8b8-b8b8-b8b8-b8b8b8b8b8b8")
         };
     }
 

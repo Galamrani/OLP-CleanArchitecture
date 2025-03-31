@@ -1,29 +1,34 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using OnlineLearningPlatform.Application.Common;
+using OnlineLearningPlatform.Application.Configurations;
 using OnlineLearningPlatform.Application.DTOs;
 using OnlineLearningPlatform.Application.Interfaces;
 using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.Application.Services.Authentication;
 
-public class AuthenticationService(ITokenGenerator tokenGenerator, IUserDAO userDAO, IUnitOfWork unitOfWork) : IAuthenticationService
+public class AuthenticationService(IUserDataService userDataService, IOptions<JwtSettings> jwtOptions) : IAuthenticationService
 {
-    private readonly ITokenGenerator tokenGenerator = tokenGenerator;
-    private readonly IUserDAO userDAO = userDAO;
-    private readonly IUnitOfWork unitOfWork = unitOfWork;
+    private readonly IUserDataService userDataService = userDataService;
+    private readonly JwtSettings JwtSettings = jwtOptions.Value;
 
-    public async Task<string> Login(CredentialsDto credentialsDto)
+    public async Task<string> LoginAsync(CredentialsDto credentialsDto)
     {
-        User? user = await userDAO.GetUserByEmailAsync(credentialsDto.Email);
+        User? user = await userDataService.GetUserByEmailAsync(credentialsDto.Email);
 
         if (user is null) throw new KeyNotFoundException($"User with Email {credentialsDto.Email} was not found.");
         if (user.Password != PasswordHasher.HashPassword(credentialsDto.Password)) throw new UnauthorizedAccessException("Invalid password.");
 
-        return tokenGenerator.GenerateToken(user);
+        return GenerateToken(user);
     }
 
-    public async Task<string> Register(RegisterDto registerDto)
+    public async Task<string> RegisterAsync(RegisterDto registerDto)
     {
-        if (await userDAO.IsEmailTakenAsync(registerDto.Email)) throw new ArgumentException("Email is already in use.");
+        if (await userDataService.IsEmailTakenAsync(registerDto.Email)) throw new ArgumentException("Email is already in use.");
 
         User user = new User
         {
@@ -32,9 +37,35 @@ public class AuthenticationService(ITokenGenerator tokenGenerator, IUserDAO user
             Password = PasswordHasher.HashPassword(registerDto.Password)
         };
 
-        await userDAO.AddUserAsync(user);
-        await unitOfWork.SaveChangesAsync();
+        await userDataService.AddUserAsync(user);
+        await userDataService.SaveChangesAsync();
 
-        return tokenGenerator.GenerateToken(user);
+        return GenerateToken(user);
+    }
+
+    private string GenerateToken(User user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes(JwtSettings.JwtKey);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Added userId (nameId) claim
+                new Claim(ClaimTypes.Email, user.Email), // Added email claim
+                new Claim(ClaimTypes.Name, user.Name) // Added name claim
+            }),
+            Expires = DateTime.UtcNow.AddHours(JwtSettings.Lifetime),
+            Issuer = JwtSettings.Issuer,
+            Audience = JwtSettings.Audience,
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature
+            )
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 }
