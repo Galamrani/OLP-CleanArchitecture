@@ -2,18 +2,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLearningPlatform.Application.DTOs;
 using OnlineLearningPlatform.Application.Services.CourseManagement;
+using OnlineLearningPlatform.Application.Services.UserManagement;
 
 namespace OnlineLearningPlatform.API.Controllers;
 
 [Authorize]
-[Route("courses")]
-public class CoursesController(ICourseService courseService) : ApiControllerBase
+[Route("api/v1/courses")]
+public class CoursesController(ICourseService courseService, IUserService userService) : ApiControllerBase
 {
     private readonly ICourseService courseService = courseService;
+    private readonly IUserService userService = userService;
 
     [HttpGet]
     [AllowAnonymous]
-    // NOTE: fetch all courses - no lessons
     public async Task<IActionResult> GetCourses()
     {
         List<CourseDto> courses = await courseService.GetCoursesAsync();
@@ -22,10 +23,10 @@ public class CoursesController(ICourseService courseService) : ApiControllerBase
 
     [HttpGet("{courseId}")]
     [AllowAnonymous]
-    // NOTE: fetch course with lessons and progresses if user have auth, else with only lessons
     public async Task<IActionResult> GetCourse(Guid courseId)
     {
-        CourseDto course = await courseService.GetCourseAsync(courseId);
+        // fetch course with lessons and progresses if user have auth, else with only lessons
+        CourseDto course = await courseService.GetCourseAsync(GetUserId(HttpContext), courseId);
         return Ok(course);
     }
 

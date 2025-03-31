@@ -6,7 +6,7 @@ using OnlineLearningPlatform.Application.Services.LessonManagement;
 namespace OnlineLearningPlatform.API.Controllers;
 
 [Authorize]
-[Route("courses/{courseId}/lessons")]
+[Route("api/v1/courses/{courseId}/lessons")]
 public class LessonsController(ILessonService lessonService) : ApiControllerBase
 {
     private readonly ILessonService lessonService = lessonService;
@@ -33,7 +33,7 @@ public class LessonsController(ILessonService lessonService) : ApiControllerBase
     }
 
     [HttpPost("{lessonId}/progress")]
-    public async Task<IActionResult> AddLessonProgress([FromBody] ProgressDto progressDto)
+    public async Task<IActionResult> AddProgress([FromBody] ProgressDto progressDto)
     {
         ProgressDto progress = await lessonService.AddLessonProgressAsync(progressDto);
         return Created(string.Empty, progress);

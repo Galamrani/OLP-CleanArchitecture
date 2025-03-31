@@ -17,9 +17,12 @@ public class CourseService(ICourseDataService courseDataService, IUserDataServic
         return mapper.Map<List<CourseDto>>(courses);
     }
 
-    public async Task<CourseDto> GetCourseAsync(Guid courseId)
+    public async Task<CourseDto> GetCourseAsync(Guid userId, Guid courseId)
     {
-        Course? course = await courseDataService.GetCourseAsync(courseId);
+        Course? course;
+        if (userId == Guid.Empty) course = await courseDataService.GetCourseAsync(courseId);
+        else course = await courseDataService.GetCourseWithUserProgressAsync(userId, courseId);
+
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         return mapper.Map<CourseDto>(course);
@@ -28,9 +31,10 @@ public class CourseService(ICourseDataService courseDataService, IUserDataServic
     public async Task<CourseDto> AddCourseAsync(CourseDto courseDto)
     {
         Course course = mapper.Map<Course>(courseDto);
-        await courseDataService.AddCourseAsync(course);
 
+        await courseDataService.AddCourseAsync(course);
         await userDataService.SaveChangesAsync();
+
         return mapper.Map<CourseDto>(course);
     }
 
@@ -40,12 +44,13 @@ public class CourseService(ICourseDataService courseDataService, IUserDataServic
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         await courseDataService.DeleteCourseAsync(course);
+
         await userDataService.SaveChangesAsync();
     }
 
     public async Task<CourseDto> UpdateCourseAsync(Guid userId, CourseDto courseDto)
     {
-        Course? course = await courseDataService.GetCourseAsync(courseDto.Id);
+        Course? course = await courseDataService.GetCourseWithUserProgressAsync(userId, courseDto.Id);
 
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseDto.Id} was not found.");
         if (course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to delete lesson from this course. You are not the creator."); course.Title = courseDto.Title;
@@ -54,6 +59,7 @@ public class CourseService(ICourseDataService courseDataService, IUserDataServic
         course.Description = courseDto.Description;
 
         await courseDataService.SaveChangesAsync();
+
         return mapper.Map<CourseDto>(course);
     }
 }

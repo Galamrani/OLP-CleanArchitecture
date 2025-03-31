@@ -1,5 +1,7 @@
-@url=http://localhost:5048/api/user
-
+@url=http://localhost:5048/api/v1/auth
+@johnEmail=john@example.com
+@sarahEmail=sarah@example.com
+@bartEmail=bart@example.com
 
 ### Register Endpoint
 POST {{url}}/register
@@ -17,6 +19,6 @@ POST {{url}}/login
 Content-Type: application/json
 
 {
-  "Email": "bart@example.com",
+  "Email": "{{bartEmail}}",
   "Password": "Pa$$w0rd"
 }

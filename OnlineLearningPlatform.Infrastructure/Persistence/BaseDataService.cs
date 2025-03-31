@@ -3,7 +3,7 @@ using OnlineLearningPlatform.Infrastructure.Persistence.Database;
 
 namespace OnlineLearningPlatform.Infrastructure.Services.Persistence;
 
-public abstract class BaseDataService(AppDbContext context) : IBaseDataService
+public class BaseDataService(AppDbContext context) : IBaseDataService
 {
     protected readonly AppDbContext context = context;
 

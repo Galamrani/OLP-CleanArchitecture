@@ -6,13 +6,12 @@ using OnlineLearningPlatform.Application.Services.UserManagement;
 namespace OnlineLearningPlatform.API.Controllers;
 
 [Authorize]
-[Route("users/me")]
+[Route("api/v1/users/me")]
 public class UsersController(IUserService userService) : ApiControllerBase
 {
     private readonly IUserService userService = userService;
 
     [HttpGet("courses")]
-    // NOTE: fetch basic created courses - no lessons
     public async Task<IActionResult> GetCreatedCourses()
     {
         List<CourseDto> courses = await userService.GetUserCreatedCoursesAsync(GetUserId(HttpContext));
@@ -20,7 +19,6 @@ public class UsersController(IUserService userService) : ApiControllerBase
     }
 
     [HttpGet("enrollments")]
-    // NOTE: fetch basic enrolled courses - no lessons
     public async Task<IActionResult> GetEnrolledCourses()
     {
         List<CourseDto> courses = await userService.GetUserEnrolledCoursesAsync(GetUserId(HttpContext));

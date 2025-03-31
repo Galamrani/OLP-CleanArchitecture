@@ -1,8 +1,10 @@
-@url=http://localhost:5048/api/course
-@courseId=e1dd25b2-60a2-42c4-893e-c580c6abb65c
-@lessonId=5e8d583f-23f0-4c13-af3a-0ca0e90860c5
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4YWU2YWNjNS00YWExLTRjMzMtYTAwNS03Y2M0MmQ0YThkNDQiLCJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkpvaG4iLCJuYmYiOjE3NDMxNTUzNTAsImV4cCI6MTc0MzE3MzM1MCwiaWF0IjoxNzQzMTU1MzUwLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.HSTcsIL44IZO1pbvzgqxypuoMMwoC4AqpAftapjUiy8
-@creatorId=8ae6acc5-4aa1-4c33-a005-7cc42d4a8d44
+@url=http://localhost:5048/api/v1/courses
+
+@courseId=a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1
+@creatorId=33333333-3333-3333-3333-333333333333
+
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMzMzMzMzMy0zMzMzLTMzMzMtMzMzMy0zMzMzMzMzMzMzMzMiLCJlbWFpbCI6ImJhcnRAZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkJhcnQiLCJuYmYiOjE3NDM0MjkzNzUsImV4cCI6MTc0MzQ0NzM3NSwiaWF0IjoxNzQzNDI5Mzc1LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.wlbe3byTb2aaC_dnIpOn2CJIiE16AFrNyJlFkUE-Ojk
+
 
 
 
@@ -12,25 +14,13 @@ GET {{url}}
 Content-Type: application/json
 
 
-### Get Basic Course Endpoint
+### Get Course (Not Auth) Endpoint
 GET {{url}}/{{courseId}}
 Content-Type: application/json
 
 
-### Get Full Course Endpoint
-GET {{url}}/full-course/{{courseId}}
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-
-### Get Enrolled Courses Endpoint 
-GET {{url}}/student/my-courses
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-
-### Get Created Course Endpoint
-GET {{url}}/instructor/my-courses
+### Get Course (Auth) Endpoint
+GET {{url}}/{{courseId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -70,15 +60,13 @@ Content-Type: application/json
 
 
 ### Add Enrollment Endpoint
-POST {{url}}/enroll/{{courseId}}
+POST {{url}}/{{courseId}}/enrollments
 Authorization: Bearer {{token}}
 Content-Type: application/json
-
 
 ### Delete Enrollment Endpoint
-DELETE  {{url}}/unenroll/{{courseId}}
+DELETE  {{url}}/{{courseId}}/enrollments
 Authorization: Bearer {{token}}
 Content-Type: application/json
-
 
 

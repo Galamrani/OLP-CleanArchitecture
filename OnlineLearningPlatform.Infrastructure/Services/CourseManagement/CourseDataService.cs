@@ -24,7 +24,7 @@ public class CourseDataService : BaseDataService, ICourseDataService
             .SingleOrDefaultAsync(c => c.Id == courseId);
     }
 
-    public async Task<Course?> GetEnrolledCourseWithProgressAsync(Guid userId, Guid courseId)
+    public async Task<Course?> GetCourseWithUserProgressAsync(Guid userId, Guid courseId)
     {
         return await context.Courses
             .Include(c => c.Lessons)

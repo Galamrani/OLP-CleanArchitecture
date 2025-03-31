@@ -22,25 +22,18 @@ public class UserService(IUserDataService userDataService, ICourseDataService co
         return mapper.Map<List<CourseDto>>(courses);
     }
 
-    public async Task<CourseDto> GetEnrolledCourseWithProgressAsync(Guid userId, Guid courseId)
-    {
-        Course? course = await courseDataService.GetEnrolledCourseWithProgressAsync(userId, courseId);
-        if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
-
-        return mapper.Map<CourseDto>(course);
-    }
-
     public async Task<CourseDto> CreateEnrollmentAsync(Guid userId, Guid courseId)
     {
         User? user = await userDataService.GetUserByIdAsync(userId);
         if (user is null) throw new KeyNotFoundException($"User with ID {userId} was not found.");
+        if (user.EnrolledCourses.Any(c => c.CourseId == courseId)) throw new InvalidOperationException($"User already enrolled to course ID {courseId}.");
 
         Enrollment enrollment = new Enrollment { UserId = userId, CourseId = courseId };
         await userDataService.AddEnrollmentAsync(enrollment);
 
         await userDataService.SaveChangesAsync();
 
-        Course? course = await courseDataService.GetCourseAsync(courseId);
+        Course? course = await courseDataService.GetCourseWithUserProgressAsync(userId, courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         return mapper.Map<CourseDto>(course);

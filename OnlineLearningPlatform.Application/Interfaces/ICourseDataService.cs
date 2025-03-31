@@ -5,7 +5,7 @@ namespace OnlineLearningPlatform.Application.Interfaces;
 
 public interface ICourseDataService : IBaseDataService
 {
-    Task<Course?> GetEnrolledCourseWithProgressAsync(Guid userId, Guid courseId);
+    Task<Course?> GetCourseWithUserProgressAsync(Guid userId, Guid courseId);
     Task<Course?> GetCourseAsync(Guid courseId);
     Task<List<Course>> GetCoursesAsync();
     Task<List<Course>> GetUserCreatedCoursesAsync(Guid userId);

@@ -6,7 +6,7 @@ using OnlineLearningPlatform.Application.Services.Authentication;
 namespace OnlineLearningPlatform.API.Controllers;
 
 [AllowAnonymous]
-[Route("auth")]
+[Route("api/v1/auth")]
 public class AuthController(IAuthenticationService authenticationService) : ApiControllerBase
 {
     private readonly IAuthenticationService authenticationService = authenticationService;

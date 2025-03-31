@@ -21,8 +21,8 @@ public class LessonService(ILessonDataService lessonDataService, ICourseDataServ
 
         Lesson lesson = mapper.Map<Lesson>(lessonDto);
         await lessonDataService.AddLesson(lesson);
-
         await courseDataService.SaveChangesAsync();
+
         return mapper.Map<LessonDto>(lesson);
     }
 
@@ -34,6 +34,7 @@ public class LessonService(ILessonDataService lessonDataService, ICourseDataServ
         if (lesson.Course.CreatorId != userId) throw new UnauthorizedAccessException("You are not allowed to delete this lesson. You are not the creator.");
 
         await lessonDataService.DeleteLesson(lesson);
+
         await lessonDataService.SaveChangesAsync();
     }
 
@@ -49,18 +50,21 @@ public class LessonService(ILessonDataService lessonDataService, ICourseDataServ
         lesson.VideoUrl = lessonDto.VideoUrl;
 
         await lessonDataService.SaveChangesAsync();
+
         return mapper.Map<LessonDto>(lesson);
     }
 
     public async Task<ProgressDto> AddLessonProgressAsync(ProgressDto progressDto)
     {
         Lesson? lesson = await lessonDataService.GetLessonAsync(progressDto.UserId, progressDto.LessonId);
+
         if (lesson is null) throw new KeyNotFoundException($"Lesson with ID {progressDto.LessonId} was not found.");
 
         Progress progress = mapper.Map<Progress>(progressDto);
-        await lessonDataService.AddProgressAsync(progress);
 
+        await lessonDataService.AddProgressAsync(progress);
         await lessonDataService.SaveChangesAsync();
+
         return mapper.Map<ProgressDto>(progress);
     }
 }
