@@ -1,64 +1,52 @@
-<div class="container">
-  <div class="container-fluid py-3">
-    <h2
-      class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
-      style="color: #1ea545"
-      *ngIf="viewStore.view() == CourseViewType.Default"
-    >
-      <i class="bi bi-mortarboard-fill"></i> Explore Available Courses 🛍️
-    </h2>
-    <h2
-      class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
-      style="color: #d20919"
-      *ngIf="viewStore.view() == CourseViewType.Instructor"
-    >
-      <i class="bi bi-mortarboard-fill"></i> Courses You've Created 📚
-    </h2>
-    <h2
-      class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
-      style="color: #c710dc"
-      *ngIf="viewStore.view() == CourseViewType.Student"
-    >
-      <i class="bi bi-mortarboard-fill"></i> Your Learning Journey 🚀
-    </h2>
-  </div>
+<div class="w-100 d-flex justify-content-center">
+  <div class="w-100" style="max-width: 80%;">
+    <div class="py-3">
+      <h2 class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
+        style="color: #1ea545; background-color: rgba(30, 165, 69, 0.1);" *ngIf="viewStore.isDefaultView()">
+        <i class="bi bi-compass me-2"></i> Explore Available Courses 🛍️
+      </h2>
 
-  @if (viewStore.view() === CourseViewType.Instructor) {
-  <div class="d-flex gap-2 mb-3">
-    <button
-      class="btn btn-primary btn-sm d-flex align-items-center gap-1"
-      [routerLink]="['/courses/add']"
-    >
-      <i class="bi bi-pencil"></i> Add Course
-    </button>
-  </div>
-  }
+      <h2 class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
+        style="color: #d20919; background-color: rgba(210, 9, 25, 0.1);" *ngIf="viewStore.isInstructorView()">
+        <i class="bi bi-easel2-fill me-2"></i> Courses You've Created 📚
+      </h2>
 
-  <hr class="mb-4" />
-  <ng-container *ngIf="courses$ | async as courses">
-    @if (courses.length > 0) {
-    <div class="container">
-      <div class="row g-3">
-        @for (course of courses; track course.id) {
-        <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
-          <app-course-card
-            [course]="course"
-            (deleteCourseClicked)="onDeleteCourse($event)"
-            (unenrollCourseClicked)="onUnenrollCourse($event)"
-            (enrollCourseClicked)="onEnrollCourse($event)"
-            class="w-100 shadow-sm rounded"
-          ></app-course-card>
+      <h2 class="fw-bold mb-3 display-5 border-bottom pb-2 shadow-sm p-3 rounded"
+        style="color: #c710dc; background-color: rgba(199, 16, 220, 0.1);" *ngIf="viewStore.isStudentView()">
+        <i class="bi bi-journal-bookmark-fill me-2"></i> Your Learning Journey 🚀
+      </h2>
+
+      @if (viewStore.isInstructorView()) {
+      <div class="d-flex gap-2 mb-3">
+        <button class="btn btn-outline-primary btn-sm px-3 py-2 d-flex align-items-center gap-2 shadow-sm rounded-2"
+          (click)="openAddCourseModal()" aria-label="Add a new course">
+          <i class="bi bi-plus-circle fs-5"></i>
+          <span class="fw-semibold">Add Course</span>
+        </button>
+      </div>
+      }
+
+      <hr class="mb-4" />
+
+      <ng-container *ngIf="courses$ | async as courses">
+        @if (courses.length > 0) {
+        <div class="row g-3">
+          @for (course of courses; track course.id) {
+          <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+            <app-course-card [course]="course" (deleteCourseClicked)="onDeleteCourse($event)"
+              (editCourseClicked)="onEditCourse($event)" (unenrollCourseClicked)="onUnenrollCourse($event)"
+              (enrollCourseClicked)="onEnrollCourse($event)" class="w-100 shadow-sm rounded">
+            </app-course-card>
+          </div>
+          }
+        </div>
+        } @else {
+        <div class="d-flex flex-column align-items-center justify-content-center py-5">
+          <i class="bi bi-box text-muted fs-1 mb-3"></i>
+          <p class="text-muted fs-5">No courses available.</p>
         </div>
         }
-      </div>
+      </ng-container>
     </div>
-    } @else {
-    <div
-      class="d-flex flex-column align-items-center justify-content-center py-5"
-    >
-      <i class="bi bi-box text-muted fs-1 mb-3"></i>
-      <p class="text-muted fs-5">No courses available.</p>
-    </div>
-    }
-  </ng-container>
+  </div>
 </div>

@@ -1,42 +1,38 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { UserApiService } from "../../../services/user-api.service";
-import { CredentialsModel } from "../../../models/credentials.model";
-import { Router } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { ToastrService } from "ngx-toastr";
-import { ViewStore } from "../../../stores/view.store";
-import { CourseViewType } from "../../../models/user-view.enum";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CredentialsModel } from '../../../models/credentials.model';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ViewStore } from '../../../stores/view.store';
+import { CourseViewType } from '../../../models/user-view.enum';
+import { AuthService } from '../../../services/auth.service';
+import { PasswordValidationUtils } from '../../../utils/password-validation.utils';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
-  selector: "app-login",
+  selector: 'app-login',
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
+
   credentialsForm!: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
-    private userService: UserApiService,
+    private authService: AuthService,
     private viewStore: ViewStore,
     private router: Router,
-    private toastr: ToastrService
-  ) {}
+    private toast: ToastService
+  ) { }
 
   ngOnInit() {
     this.credentialsForm = this.formBuilder.group({
-      email: ["", [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: [
-        "",
+        '',
         [
           Validators.required,
           Validators.minLength(8),
@@ -48,39 +44,29 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async send() {
+  send() {
     if (this.credentialsForm.invalid) return;
 
-    try {
-      const credentials: CredentialsModel = this.credentialsForm.value;
-      await this.userService.login(credentials);
-      this.toastr.success("Welcome back!");
-      this.viewStore.setView(CourseViewType.Student);
-      this.router.navigateByUrl("/courses/student");
-    } catch (err: any) {
-      this.toastr.error("Login failed!");
-    }
+    const credentials: CredentialsModel = this.credentialsForm.value;
+    this.authService.login(credentials).subscribe({
+      next: () => {
+        this.toast.showSuccess('Welcome back!');
+        this.viewStore.setView(CourseViewType.Student);
+        this.router.navigateByUrl('/courses/student');
+      },
+      error: () => this.toast.showError('Login failed!'),
+    });
   }
 
-  // Helper methods to check specific errors
   hasUppercaseError() {
-    return (
-      this.credentialsForm.get("password")?.hasError("pattern") &&
-      !/[A-Z]/.test(this.credentialsForm.get("password")?.value)
-    );
+    return PasswordValidationUtils.hasUppercaseError(this.credentialsForm);
   }
 
   hasDigitError() {
-    return (
-      this.credentialsForm.get("password")?.hasError("pattern") &&
-      !/\d/.test(this.credentialsForm.get("password")?.value)
-    );
+    return PasswordValidationUtils.hasDigitError(this.credentialsForm);
   }
 
   hasSpecialCharError() {
-    return (
-      this.credentialsForm.get("password")?.hasError("pattern") &&
-      !/[\W_]/.test(this.credentialsForm.get("password")?.value)
-    );
+    return PasswordValidationUtils.hasSpecialCharError(this.credentialsForm);
   }
 }

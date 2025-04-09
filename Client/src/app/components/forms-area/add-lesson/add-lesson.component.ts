@@ -1,16 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from "@angular/forms";
 import { LessonModel } from "../../../models/lesson.model";
-import { CourseManagerService } from "../../../services/course-manager.service";
-import { ToastrService } from "ngx-toastr";
 import { CommonModule } from "@angular/common";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-add-lesson",
@@ -21,38 +13,22 @@ import { CommonModule } from "@angular/common";
 })
 export class AddLessonComponent implements OnInit {
   lessonForm!: FormGroup;
-  courseId?: string | null;
+  @Input() courseId!: string;
 
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
-    private CourseManagerService: CourseManagerService,
-    private route: ActivatedRoute,
-    private toastr: ToastrService
-  ) {}
+    public activeModal: NgbActiveModal,
+  ) { }
 
   ngOnInit() {
-    this.courseId = this.route.snapshot.queryParamMap.get("courseId");
     this.lessonForm = this.formBuilder.group({
-      title: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(200),
-        ],
-      ],
+      title: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
       description: ["", [Validators.maxLength(2000)]],
       videoUrl: ["", [Validators.required, Validators.pattern("https?://.+")]],
     });
   }
 
   send() {
-    if (!this.courseId) {
-      this.toastr.error("Invalid course ID! Cannot add lesson.");
-      return;
-    }
-
     const lesson: LessonModel = {
       title: this.lessonForm.get("title")!.value,
       description: this.lessonForm.get("description")!.value,
@@ -60,19 +36,6 @@ export class AddLessonComponent implements OnInit {
       courseId: this.courseId,
       progresses: [],
     };
-
-    this.CourseManagerService.addLesson(lesson.courseId, lesson).subscribe({
-      next: () => {
-        this.toastr.success("Lesson has been successfully added!");
-        this.router.navigate(["courses", "details", this.courseId]);
-      },
-      error: (err: any) => {
-        this.toastr.error(
-          err.parsedMessage ||
-            err.message ||
-            "Failed to add the lesson. Please try again."
-        );
-      },
-    });
+    this.activeModal.close(lesson);
   }
 }

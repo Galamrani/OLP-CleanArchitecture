@@ -1,22 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { Router } from "@angular/router";
+import { ChangeDetectionStrategy, Component, OnInit, } from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from "@angular/forms";
 import { CourseModel } from "../../../models/course.model";
 import { UserStore } from "../../../stores/user.store";
-import { CourseManagerService } from "../../../services/course-manager.service";
-import { ToastrService } from "ngx-toastr";
 import { CommonModule } from "@angular/common";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: "app-add-course",
@@ -28,25 +16,14 @@ import { CommonModule } from "@angular/common";
 export class AddCourseComponent implements OnInit {
   courseForm!: FormGroup;
 
-  private userStore = inject(UserStore);
-
   constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private CourseManagerService: CourseManagerService,
-    private toastr: ToastrService
-  ) {}
+    public activeModal: NgbActiveModal,
+    private userStore: UserStore,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.courseForm = this.formBuilder.group({
-      title: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(200),
-        ],
-      ],
+      title: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
       description: ["", [Validators.maxLength(2000)]],
     });
   }
@@ -58,19 +35,6 @@ export class AddCourseComponent implements OnInit {
       creatorId: this.userStore.getUserId()!,
       lessons: [],
     };
-
-    this.CourseManagerService.addCourse(course).subscribe({
-      next: () => {
-        this.toastr.success("Course has been successfully added!");
-        this.router.navigate(["courses", "instructor"]);
-      },
-      error: (err: any) => {
-        this.toastr.error(
-          err.parsedMessage ||
-            err.message ||
-            "Failed to add the course. Please try again."
-        );
-      },
-    });
+    this.activeModal.close(course);
   }
 }

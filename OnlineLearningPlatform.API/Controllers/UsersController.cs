@@ -6,22 +6,48 @@ using OnlineLearningPlatform.Application.Services.UserManagement;
 namespace OnlineLearningPlatform.API.Controllers;
 
 [Authorize]
-[Route("api/v1/users/me")]
+[Route("api/v1/users/{userId}")]
 public class UsersController(IUserService userService) : ApiControllerBase
 {
     private readonly IUserService userService = userService;
 
     [HttpGet("courses")]
-    public async Task<IActionResult> GetCreatedCourses()
+    public async Task<IActionResult> GetCreatedCourses(Guid userId)
     {
-        List<CourseDto> courses = await userService.GetUserCreatedCoursesAsync(GetUserId(HttpContext));
+        if (userId != GetUserId(HttpContext)) return Forbid();
+        List<CourseDto> courses = await userService.GetUserCreatedCoursesAsync(userId);
         return Ok(courses);
     }
 
     [HttpGet("enrollments")]
-    public async Task<IActionResult> GetEnrolledCourses()
+    public async Task<IActionResult> GetEnrolledCourses(Guid userId)
     {
-        List<CourseDto> courses = await userService.GetUserEnrolledCoursesAsync(GetUserId(HttpContext));
+        if (userId != GetUserId(HttpContext)) return Forbid();
+        List<CourseDto> courses = await userService.GetUserEnrolledCoursesAsync(userId);
         return Ok(courses);
+    }
+
+    [HttpGet("enrollments/{courseId}")]
+    public async Task<IActionResult> GetEnrolledCourse(Guid userId, Guid courseId)
+    {
+        if (userId != GetUserId(HttpContext)) return Forbid();
+        CourseDto course = await userService.GetEnrolledCourseAsync(userId, courseId);
+        return Ok(course);
+    }
+
+    [HttpPost("enrollments/{courseId}")]
+    public async Task<IActionResult> Enroll(Guid userId, Guid courseId)
+    {
+        if (userId != GetUserId(HttpContext)) return Forbid();
+        CourseDto course = await userService.CreateEnrollmentAsync(userId, courseId);
+        return Created(string.Empty, course);
+    }
+
+    [HttpDelete("enrollments/{courseId}")]
+    public async Task<IActionResult> Unenroll(Guid userId, Guid courseId)
+    {
+        if (userId != GetUserId(HttpContext)) return Forbid();
+        await userService.DeleteEnrollmentAsync(userId, courseId);
+        return NoContent();
     }
 }

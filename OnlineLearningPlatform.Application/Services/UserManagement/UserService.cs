@@ -5,10 +5,11 @@ using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.Application.Services.UserManagement;
 
-public class UserService(IUserDataService userDataService, ICourseDataService courseDataService, IMapper mapper) : IUserService
+public class UserService(IUserDataService userDataService, ICourseDataService courseDataService, IEnrollmentDataService enrollmentDataService, IMapper mapper) : IUserService
 {
     private readonly IUserDataService userDataService = userDataService;
     private readonly ICourseDataService courseDataService = courseDataService;
+    private readonly IEnrollmentDataService enrollmentDataService = enrollmentDataService;
 
     public async Task<List<CourseDto>> GetUserCreatedCoursesAsync(Guid userId)
     {
@@ -29,9 +30,9 @@ public class UserService(IUserDataService userDataService, ICourseDataService co
         if (user.EnrolledCourses.Any(c => c.CourseId == courseId)) throw new InvalidOperationException($"User already enrolled to course ID {courseId}.");
 
         Enrollment enrollment = new Enrollment { UserId = userId, CourseId = courseId };
-        await userDataService.AddEnrollmentAsync(enrollment);
+        await enrollmentDataService.AddEnrollmentAsync(enrollment);
 
-        await userDataService.SaveChangesAsync();
+        await enrollmentDataService.SaveChangesAsync();
 
         Course? course = await courseDataService.GetCourseWithUserProgressAsync(userId, courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
@@ -41,10 +42,18 @@ public class UserService(IUserDataService userDataService, ICourseDataService co
 
     public async Task DeleteEnrollmentAsync(Guid userId, Guid courseId)
     {
-        Enrollment? enrollment = await userDataService.GetUserEnrollmentAsync(userId, courseId);
+        Enrollment? enrollment = await enrollmentDataService.GetUserEnrollmentAsync(userId, courseId);
         if (enrollment is null) throw new KeyNotFoundException($"Enrollment with user ID {userId} and Course ID {courseId} was not found.");
 
-        await userDataService.RemoveEnrollmentAsync(enrollment);
-        await courseDataService.SaveChangesAsync();
+        await enrollmentDataService.RemoveEnrollmentAsync(enrollment);
+        await enrollmentDataService.SaveChangesAsync();
+    }
+
+    public async Task<CourseDto> GetEnrolledCourseAsync(Guid userId, Guid courseId)
+    {
+        Course? course = await courseDataService.GetCourseWithUserProgressAsync(userId, courseId);
+        if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
+
+        return mapper.Map<CourseDto>(course);
     }
 }

@@ -1,4 +1,3 @@
-using OnlineLearningPlatform.Application.DTOs;
 using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.Application.Interfaces;

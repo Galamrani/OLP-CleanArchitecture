@@ -1,20 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  input,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnInit, output, signal, } from '@angular/core';
 import { CourseModel } from '../../../models/course.model';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CourseViewType } from '../../../models/user-view.enum';
 import { ViewStore } from '../../../stores/view.store';
-import { CourseManagerService } from '../../../services/course-manager.service';
 import { UserStore } from '../../../stores/user.store';
+import { CourseCatalogService } from '../../../services/course-catalog.service';
 
 @Component({
   selector: 'app-course-card',
@@ -24,17 +15,20 @@ import { UserStore } from '../../../stores/user.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseCardComponent implements OnInit {
-  CourseManagerService = inject(CourseManagerService);
-  viewStore = inject(ViewStore);
-  userStore = inject(UserStore);
 
   course = input.required<CourseModel>();
   deleteCourseClicked = output<string>();
+  editCourseClicked = output<CourseModel>();
   unenrollCourseClicked = output<string>();
   enrollCourseClicked = output<string>();
-  CourseViewType = CourseViewType;
-
   isEnrolled = signal(false);
+
+  constructor(
+    private courseCatalogService: CourseCatalogService,
+    private router: Router,
+    public viewStore: ViewStore,
+    public userStore: UserStore
+  ) { }
 
   ngOnInit(): void {
     this.updateEnrollmentStatus();
@@ -42,6 +36,10 @@ export class CourseCardComponent implements OnInit {
 
   handleDeleteClick() {
     this.deleteCourseClicked.emit(this.course().id!);
+  }
+
+  handleEditClick() {
+    this.editCourseClicked.emit(this.course());
   }
 
   handleUnenroll() {
@@ -54,9 +52,13 @@ export class CourseCardComponent implements OnInit {
     this.enrollCourseClicked.emit(this.course().id!);
   }
 
+  navigateToCourseDetails(courseId: string) {
+    this.router.navigate(['/courses', 'details', courseId]);
+  }
+
   private updateEnrollmentStatus() {
     this.isEnrolled.set(
-      this.CourseManagerService.isEnrolledToCourse(this.course().id!)
+      this.courseCatalogService.isEnrolledToCourse(this.course().id!)
     );
   }
 }

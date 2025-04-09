@@ -12,10 +12,8 @@ import { ViewStore } from '../../../stores/view.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent {
-  CourseViewType = CourseViewType;
 
-  userStore = inject(UserStore);
-  viewStore = inject(ViewStore);
+  constructor(public userStore: UserStore, public viewStore: ViewStore) { }
 
   ngOnInit(): void {
     this.viewStore.setView(CourseViewType.Default);

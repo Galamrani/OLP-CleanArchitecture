@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './components/page-area/home-page/home-page.component';
-import { NotFoundComponent } from './components/page-area/not-found/not-found.component';
 import { LoginComponent } from './components/forms-area/login/login.component';
 import { RegisterComponent } from './components/forms-area/register/register.component';
+import { HomePageComponent } from './components/page-area/home-page/home-page.component';
+import { courseCatalogResolver } from './resolvers/course-catalog.resolver';
+import { courseDetailsResolver } from './resolvers/course-details.resolver';
+import { NotFoundComponent } from './components/page-area/not-found/not-found.component';
+import { ServerErrorComponent } from './components/page-area/server-error/server-error.component';
 import { authGuard } from './guards/auth.guard';
 import { viewGuard } from './guards/view.guard';
-import { ServerErrorComponent } from './components/page-area/server-error/server-error.component';
-import { courseDetailsResolver } from './resolvers/course-details.resolver';
-import { courseCatalogResolver } from './resolvers/course-catalog.resolver';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -50,39 +50,24 @@ export const routes: Routes = [
     resolve: { course: courseCatalogResolver },
   },
   {
-    path: 'courses/add',
+    path: 'not-found',
     loadComponent: () =>
-      import('./components/forms-area/add-course/add-course.component').then(
-        (m) => m.AddCourseComponent
+      import('./components/page-area/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
       ),
-    canActivate: [authGuard],
   },
   {
-    path: 'lessons/add',
+    path: 'server-error',
     loadComponent: () =>
-      import('./components/forms-area/add-lesson/add-lesson.component').then(
-        (m) => m.AddLessonComponent
+      import('./components/page-area/server-error/server-error.component').then(
+        (m) => m.ServerErrorComponent
       ),
-    canActivate: [authGuard],
   },
   {
-    path: 'courses/edit/:id',
+    path: '**',
     loadComponent: () =>
-      import('./components/forms-area/edit-course/edit-course.component').then(
-        (m) => m.EditCourseComponent
+      import('./components/page-area/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
       ),
-    canActivate: [authGuard],
   },
-  {
-    path: 'lessons/edit/:id',
-    loadComponent: () =>
-      import('./components/forms-area/edit-lesson/edit-lesson.component').then(
-        (m) => m.EditLessonComponent
-      ),
-    canActivate: [authGuard],
-  },
-
-  { path: 'not-found', component: NotFoundComponent },
-  { path: 'server-error', component: ServerErrorComponent },
-  { path: '**', component: NotFoundComponent },
 ];

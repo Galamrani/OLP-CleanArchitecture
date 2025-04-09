@@ -10,7 +10,7 @@ public class LessonDataService : BaseDataService, ILessonDataService
 {
     public LessonDataService(AppDbContext context) : base(context) { }
 
-    public async Task<Lesson?> GetLessonAsync(Guid userId, Guid lessonId)
+    public async Task<Lesson?> GetLessonAsync(Guid lessonId)
     {
         return await context.Lessons
             .Include(l => l.Course)
@@ -22,14 +22,14 @@ public class LessonDataService : BaseDataService, ILessonDataService
         await context.Lessons.AddAsync(lesson);
     }
 
+    public async Task AddProgressAsync(Progress progress)
+    {
+        await context.Progresses.AddAsync(progress);
+    }
+
     public Task DeleteLesson(Lesson lesson)
     {
         context.Lessons.Remove(lesson);
         return Task.CompletedTask;
-    }
-
-    public async Task AddProgressAsync(Progress progress)
-    {
-        await context.Progresses.AddAsync(progress);
     }
 }

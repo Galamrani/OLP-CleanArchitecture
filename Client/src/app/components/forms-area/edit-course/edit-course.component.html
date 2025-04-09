@@ -1,42 +1,34 @@
-<div>
-  <form [formGroup]="courseForm" (submit)="send()">
-    <h1>Edit Course</h1>
+<div class="modal-header">
+    <h4 class="modal-title">Edit Course</h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
 
-    <label>Title: </label>
-    <input type="text" formControlName="title" />
-    <div
-      *ngIf="
-        courseForm.get('title')?.invalid &&
-        (courseForm.get('title')?.dirty || courseForm.get('title')?.touched)
-      "
-      class="error"
-    >
-      <span *ngIf="courseForm.get('title')?.errors?.['required']"
-        >Title is required.</span
-      >
-      <span *ngIf="courseForm.get('title')?.errors?.['minlength']"
-        >Title must be at least 5 characters.</span
-      >
-      <span *ngIf="courseForm.get('title')?.errors?.['maxlength']"
-        >Title cannot exceed 200 characters.</span
-      >
-    </div>
+<div class="modal-body">
+    <form [formGroup]="courseForm">
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" formControlName="title" />
+            <div *ngIf="courseForm.get('title')?.invalid && (courseForm.get('title')?.dirty || courseForm.get('title')?.touched)"
+                class="text-danger">
+                <div *ngIf="courseForm.get('title')?.errors?.['required']">Title is required.</div>
+                <div *ngIf="courseForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters.</div>
+                <div *ngIf="courseForm.get('title')?.errors?.['maxlength']">Title cannot exceed 200 characters.</div>
+            </div>
+        </div>
 
-    <label>description: </label>
-    <input type="text" formControlName="description" />
-    <div
-      *ngIf="
-        courseForm.get('description')?.invalid &&
-        (courseForm.get('description')?.dirty ||
-          courseForm.get('description')?.touched)
-      "
-      class="error"
-    >
-      <span *ngIf="courseForm.get('description')?.errors?.['maxlength']"
-        >Description cannot exceed 2000 characters.</span
-      >
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <input type="text" class="form-control" formControlName="description" />
+            <div *ngIf="courseForm.get('description')?.invalid && (courseForm.get('description')?.dirty || courseForm.get('description')?.touched)"
+                class="text-danger">
+                <div *ngIf="courseForm.get('description')?.errors?.['maxlength']">Description cannot exceed 2000
+                    characters.</div>
+            </div>
+        </div>
+    </form>
+</div>
 
-    <button [disabled]="courseForm.invalid">Edit</button>
-  </form>
+<div class="modal-footer">
+    <button class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
+    <button class="btn btn-primary" [disabled]="courseForm.invalid" (click)="send()">Save Changes</button>
 </div>

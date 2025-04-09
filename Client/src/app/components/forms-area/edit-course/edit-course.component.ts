@@ -1,22 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { CourseModel } from "../../../models/course.model";
-import { UserStore } from "../../../stores/user.store";
-import { CourseManagerService } from "../../../services/course-manager.service";
-import { ToastrService } from "ngx-toastr";
-import { CommonModule } from "@angular/common";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CourseModel } from '../../../models/course.model';
+import { UserStore } from '../../../stores/user.store';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: "app-edit-course",
@@ -25,69 +12,34 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./edit-course.component.css",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditCourseComponent {
+export class EditCourseComponent implements OnInit {
   courseForm!: FormGroup;
-  course!: CourseModel;
-
-  userStore = inject(UserStore);
-  toastr = inject(ToastrService);
+  @Input() course!: CourseModel;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
+    public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private courseManagerService: CourseManagerService
-  ) {
+    private userStore: UserStore) { }
+
+  ngOnInit() {
     this.courseForm = this.formBuilder.group({
-      title: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(200),
-        ],
-      ],
+      title: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
       description: ["", [Validators.maxLength(2000)]],
     });
 
-    const courseId = this.route.snapshot.paramMap.get("id"); // Get from paramMap (not queryParamMap)
-    if (!courseId) {
-      console.error("Missing courseId in route parameters.");
-      return;
-    }
-
-    const course = this.courseManagerService.getCreatedCourseById(courseId);
-    if (!course) {
-      console.error("Course not found.");
-      return;
-    }
-
     this.courseForm.patchValue({
-      title: course.title,
-      description: course.description,
+      title: this.course.title,
+      description: this.course.description,
     });
   }
 
   async send() {
     const course: CourseModel = {
-      id: this.route.snapshot.paramMap.get("id")!,
+      id: this.course.id,
       title: this.courseForm.get("title")!.value,
       description: this.courseForm.get("description")!.value,
       creatorId: this.userStore.getUserId()!,
     };
-
-    this.courseManagerService.updateCourse(course).subscribe({
-      next: () => {
-        this.toastr.success("Course has been successfully updated!");
-        this.router.navigate(["/courses", "instructor"]);
-      },
-      error: (err: any) => {
-        this.toastr.error(
-          err.parsedMessage ||
-            err.message ||
-            "Unable to update the course. Please try again."
-        );
-      },
-    });
+    this.activeModal.close(course);
   }
 }

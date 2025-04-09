@@ -1,15 +1,13 @@
 <div class="d-flex flex-column min-vh-100">
-  <header>
+  <header class="w-100">
     <app-navbar></app-navbar>
   </header>
 
-  <main class="flex-grow-1 py-4">
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
+  <main class="flex-grow-1 py-4 w-100">
+    <router-outlet></router-outlet>
   </main>
 
-  <footer class="bg-light">
+  <footer class="bg-light w-100">
     <app-footer></app-footer>
   </footer>
 </div>

@@ -9,7 +9,7 @@ public static class LoggingExtensions
         string logFilePath = "Logs/api-.log";
 
         var logger = new LoggerConfiguration()
-            .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 2)
+            .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 1)
             .MinimumLevel.Information()
             .CreateLogger();
 

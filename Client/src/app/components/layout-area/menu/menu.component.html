@@ -1,43 +1,38 @@
 <div class="d-flex align-items-center">
   <h5 class="me-3 mb-0 d-none d-md-block">
-    <span class="text-muted"
-      >Welcome, {{ userStore.getUserName() ?? "Guest" | titlecase }}</span
-    >
+    <span class="text-muted">
+      Welcome, {{ userStore.getUserName() ?? "Guest" | titlecase }}
+    </span>
   </h5>
-  <div ngbDropdown>
-    <button
-      type="button"
-      class="btn btn-outline-primary rounded-pill px-3"
-      id="dropdownBasic1"
-      ngbDropdownToggle
-    >
-      Menu
+
+  <div ngbDropdown class="dropdown">
+    <button type="button" class="btn btn-outline-primary rounded-pill px-3" id="dropdownBasic1" ngbDropdownToggle>
+      <i class="bi bi-list"></i> Menu
     </button>
-    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="shadow-sm">
+
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="shadow-sm dropdown-menu-end p-1"
+      style="min-width: 220px; max-height: 300px; overflow-y: auto;">
       @if (userStore.isLoggedIn()) {
-      <button
-        ngbDropdownItem
-        (click)="navigateToCourseCatalog(CourseViewType.Default)"
-      >
-        All Courses
+      <button ngbDropdownItem (click)="navigateToCourseCatalog(CourseViewType.Default)">
+        <i class="bi bi-grid me-2"></i> All Courses Catalog
       </button>
-      <button
-        ngbDropdownItem
-        (click)="navigateToCourseCatalog(CourseViewType.Student)"
-      >
-        Student view
+      <button ngbDropdownItem (click)="navigateToCourseCatalog(CourseViewType.Student)">
+        <i class="bi bi-person-lines-fill me-2"></i> Student Catalog
       </button>
-      <button
-        ngbDropdownItem
-        (click)="navigateToCourseCatalog(CourseViewType.Instructor)"
-      >
-        Instructor view
+      <button ngbDropdownItem (click)="navigateToCourseCatalog(CourseViewType.Instructor)">
+        <i class="bi bi-easel2-fill me-2"></i> Instructor Catalog
       </button>
       <div class="dropdown-divider"></div>
-      <button ngbDropdownItem (click)="logout()">Logout</button>
+      <button ngbDropdownItem (click)="logout()">
+        <i class="bi bi-box-arrow-right me-2"></i> Logout
+      </button>
       } @else {
-      <button ngbDropdownItem [routerLink]="'/login'">Login</button>
-      <button ngbDropdownItem [routerLink]="'/register'">Register</button>
+      <button ngbDropdownItem (click)="navigateToLoginForm()" [routerLink]="'/login'">
+        <i class="bi bi-box-arrow-in-right me-2"></i> Login
+      </button>
+      <button ngbDropdownItem (click)="navigateToRegisterForm()" [routerLink]="'/register'">
+        <i class="bi bi-person-plus-fill me-2"></i> Register
+      </button>
       }
     </div>
   </div>

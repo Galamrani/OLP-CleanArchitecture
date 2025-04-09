@@ -1,27 +1,21 @@
-<div class="error-container">
-  <div class="error-content">
-    <h1>500</h1>
-    <h2>Server Error</h2>
-    <p>{{ errorMessage }}</p>
+<div class="d-flex flex-column align-items-center justify-content-center text-center py-5" style="min-height: 80vh;">
+  <!-- Error Code -->
+  <h1 class="display-1 text-danger fw-bold mb-2">500</h1>
 
-    @if (errorDetails) {
-    <div class="error-details">
-      <h3>Error Details:</h3>
-      <p>{{ errorDetails | json }}</p>
-    </div>
-    }
+  <!-- Error Message -->
+  <h2 class="mb-4 text-secondary">Server Error</h2>
 
-    <div class="error-actions">
-      <a routerLink="/" class="btn-primary">Go to Home</a>
-    </div>
-  </div>
-
-  <div class="error-image">
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M100 20C55.2 20 20 55.2 20 100s35.2 80 80 80 80-35.2 80-80S144.8 20 100 20zm0 140c-33.1 0-60-26.9-60-60s26.9-60 60-60 60 26.9 60 60-26.9 60-60 60z"
-      />
-      <path d="M70 70v20h20V70H70zm40 0v20h20V70h-20zm-40 40v20h60v-20H70z" />
+  <!-- SVG Icon -->
+  <div class="mb-4" style="width: 120px; height: 120px;">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-100 h-100 text-muted">
+      <path fill="currentColor"
+        d="M100 20C55.2 20 20 55.2 20 100s35.2 80 80 80 80-35.2 80-80S144.8 20 100 20zm0 140c-33.1 0-60-26.9-60-60s26.9-60 60-60 60 26.9 60 60-26.9 60-60 60z" />
+      <path fill="currentColor" d="M70 70v20h20V70H70zm40 0v20h20V70h-20zm-40 40v20h60v-20H70z" />
     </svg>
   </div>
+
+  <!-- Action Button -->
+  <a routerLink="/" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+    Go to Home
+  </a>
 </div>

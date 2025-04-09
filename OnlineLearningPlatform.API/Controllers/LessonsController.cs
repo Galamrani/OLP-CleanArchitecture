@@ -14,21 +14,24 @@ public class LessonsController(ILessonService lessonService) : ApiControllerBase
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] LessonDto lessonDto)
     {
-        LessonDto lesson = await lessonService.AddLessonAsync(GetUserId(HttpContext), lessonDto);
+        Guid userId = GetUserId(HttpContext);
+        LessonDto lesson = await lessonService.AddLessonAsync(userId, lessonDto);
         return Created(string.Empty, lesson);
     }
 
     [HttpDelete("{lessonId}")]
     public async Task<IActionResult> Delete(Guid lessonId)
     {
-        await lessonService.DeleteLessonAsync(GetUserId(HttpContext), lessonId);
+        Guid userId = GetUserId(HttpContext);
+        await lessonService.DeleteLessonAsync(userId, lessonId);
         return NoContent();
     }
 
     [HttpPatch("{lessonId}")]
     public async Task<IActionResult> Update([FromBody] LessonDto lessonDto)
     {
-        LessonDto lesson = await lessonService.UpdateLessonAsync(GetUserId(HttpContext), lessonDto);
+        Guid userId = GetUserId(HttpContext);
+        LessonDto lesson = await lessonService.UpdateLessonAsync(userId, lessonDto);
         return Ok(lesson);
     }
 

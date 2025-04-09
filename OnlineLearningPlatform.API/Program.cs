@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineLearningPlatform.API.Extensions;
 using OnlineLearningPlatform.API.Middlewares;
@@ -12,12 +13,14 @@ using OnlineLearningPlatform.Application.Services.LessonManagement;
 using OnlineLearningPlatform.Application.Services.UserManagement;
 using OnlineLearningPlatform.Application.Validators;
 using OnlineLearningPlatform.Infrastructure.Persistence.Database;
+using OnlineLearningPlatform.Infrastructure.Services;
 using OnlineLearningPlatform.Infrastructure.Services.CourseManagement;
 using OnlineLearningPlatform.Infrastructure.Services.LessonManagement;
 using OnlineLearningPlatform.Infrastructure.Services.Persistence;
 using OnlineLearningPlatform.Infrastructure.Services.UserManagement;
 
 var builder = WebApplication.CreateBuilder(args);
+
 {
     // Configure Serilog for logging
     builder.AddSerilogLogging();
@@ -52,6 +55,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<ICourseDataService, CourseDataService>();
     builder.Services.AddScoped<ILessonDataService, LessonDataService>();
     builder.Services.AddScoped<IUserDataService, UserDataService>();
+    builder.Services.AddScoped<IEnrollmentDataService, EnrollmentDataService>();
 
     // Application
     builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
@@ -60,8 +64,9 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<ILessonService, LessonService>();
     builder.Services.AddScoped<IUserService, UserService>();
 
+    // TODO: Configure FluentValidation to throw exceptions without body
     builder.Services.AddFluentValidationAutoValidation();
-    builder.Services.AddValidatorsFromAssemblyContaining<CourseDtoValidator>(); // Scans the assembly containing CourseDtoValidator for all AbstractValidator<T> implementations
+    builder.Services.AddValidatorsFromAssemblyContaining<ValidatorAssemblyMarker>();
 
     builder.Services.AddControllers();
 }

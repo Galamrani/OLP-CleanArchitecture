@@ -9,7 +9,7 @@
 
 
 
-### Get Courses Endpoint
+### Get Courses (Not Auth) Endpoint
 GET {{url}}
 Content-Type: application/json
 
@@ -17,13 +17,6 @@ Content-Type: application/json
 ### Get Course (Not Auth) Endpoint
 GET {{url}}/{{courseId}}
 Content-Type: application/json
-
-
-### Get Course (Auth) Endpoint
-GET {{url}}/{{courseId}}
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
 
 ### ----------------------------------
 
@@ -35,7 +28,7 @@ Content-Type: application/json
 
 {
   "creatorId": "{{creatorId}}",
-  "title": "Introduction to Machine Learning",
+  "title": "",
   "description": "A beginner-friendly course on the fundamentals of machine learning."
 }
 
@@ -58,15 +51,5 @@ DELETE  {{url}}/{{courseId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
-
-### Add Enrollment Endpoint
-POST {{url}}/{{courseId}}/enrollments
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-### Delete Enrollment Endpoint
-DELETE  {{url}}/{{courseId}}/enrollments
-Authorization: Bearer {{token}}
-Content-Type: application/json
 
 

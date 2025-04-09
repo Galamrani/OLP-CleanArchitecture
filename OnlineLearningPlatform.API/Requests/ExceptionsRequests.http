@@ -1,5 +1,5 @@
-@url=http://localhost:5048/api/course
-@url2=http://localhost:5048/api/user
+@url=http://localhost:5048/api/v1/courses
+@url2=http://localhost:5048/api/v1/users
 @courseId=ef0c94df-ff57-48e7-9073-311d66747dc4
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwNjZlODQzOS04NzY0LTQ4MzctYjQyOS0zMTBmYjcyYjUzODQiLCJlbWFpbCI6ImJhcnRAZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkJhcnQiLCJuYmYiOjE3NDMxNzA2NDIsImV4cCI6MTc0MzE4ODY0MiwiaWF0IjoxNzQzMTcwNjQyLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.4OuU_iGj5gO53h49KqjsJgFtNrqT3GGLjK35vBtklrs
 
@@ -23,13 +23,13 @@ Content-Type: application/json
 
 
 ### (ArgumentException) Unenroll from a course you're not enrolled in
-DELETE  {{url2}}/unenroll/{{courseId}}
+DELETE  {{url2}}/00000000-0000-0000-0000-000000000000/enrollments/{{courseId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 
 ### (KeyNotFoundException) Get a non-existent course
-GET {{url}}/full-course/00000000-0000-0000-0000-000000000000
+GET {{url}}/00000000-0000-0000-0000-000000000000
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

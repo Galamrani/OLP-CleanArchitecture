@@ -1,52 +1,38 @@
-import { Injectable } from "@angular/core";
-import { CourseModel } from "../models/course.model";
-import { LessonModel } from "../models/lesson.model";
-import { ProgressModel } from "../models/progress.model";
+import { Injectable } from '@angular/core';
+import { CourseModel } from '../models/course.model';
+import { LessonModel } from '../models/lesson.model';
+import { ProgressModel } from '../models/progress.model';
+import { CourseType } from '../models/course-type.enum';
+import { environment } from '../../environments/environment';
 
-/**
- *
- * Manages **created and enrolled user courses**, caching data in memory and LocalStorage
- * to reduce API calls and ensure offline availability.
- * This store is **only accessed and modified by the CourseManagerService (Facade)**
- * to maintain consistency.
- *
- * **Key Features:**
- * - Stores courses in **Map structures** for quick access.
- * - **Syncs with LocalStorage** to persist data across sessions.
- * - Handles **CRUD operations** for courses, lessons, and progress.
- * - Provides **efficient getters** for accessing cached courses.
- *
- * **Why Use It?**
- * - Reduces API requests by caching data.
- * - Ensures **offline support** with LocalStorage.
- * - Maintains **state consistency** with the API through the facade.
- */
 
-enum CoursesStorageKey {
-  CreatedCourses = "createdCourses",
-  EnrolledCourses = "enrolledCourses",
-}
-
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class CourseStore {
-  private _createdCourses: Map<string, CourseModel> =
-    this.loadFromStorage(CoursesStorageKey.CreatedCourses) || new Map();
-  private _enrolledCourses: Map<string, CourseModel> =
-    this.loadFromStorage(CoursesStorageKey.EnrolledCourses) || new Map();
 
-  reset() {
-    this._createdCourses.clear();
-    this._enrolledCourses.clear();
+  // Private state
+  private _createdCourses = new Map<string, CourseModel>();
+  private _enrolledCourses = new Map<string, CourseModel>();
 
-    localStorage.removeItem(CoursesStorageKey.CreatedCourses);
-    localStorage.removeItem(CoursesStorageKey.EnrolledCourses);
+  constructor() {
+    // Initialize state from storage
+    this._createdCourses = this.loadFromStorage(CourseType.Created);
+    this._enrolledCourses = this.loadFromStorage(CourseType.Enrolled);
   }
 
-  getCreatedCoursesArray(): CourseModel[] {
+  // Reset all data
+  reset(): void {
+    this._createdCourses.clear();
+    this._enrolledCourses.clear();
+    sessionStorage.removeItem(CourseType.Created);
+    sessionStorage.removeItem(CourseType.Enrolled);
+  }
+
+  // Course getters
+  getCreatedCourses(): CourseModel[] {
     return Array.from(this._createdCourses.values());
   }
 
-  getEnrolledCoursesArray(): CourseModel[] {
+  getEnrolledCourses(): CourseModel[] {
     return Array.from(this._enrolledCourses.values());
   }
 
@@ -54,111 +40,150 @@ export class CourseStore {
     return this._createdCourses.get(courseId);
   }
 
-  isCreatedCoursesEmpty(): boolean {
-    return this._createdCourses.size === 0;
+  getCourseDetails(courseId: string, courseType: CourseType): CourseModel | undefined {
+    let course: CourseModel | undefined;
+
+    if (courseType === CourseType.Enrolled) {
+      course = this._enrolledCourses.get(courseId);
+    } else if (courseType === CourseType.Created) {
+      course = this._createdCourses.get(courseId);
+    } else if (courseType === CourseType.All) {
+      course = this._enrolledCourses.get(courseId) ?? this._createdCourses.get(courseId);
+    }
+
+    if (!course) return undefined;
+
+    return {
+      ...course,
+      lessons: (course.lessons ?? []).map(lesson => ({
+        ...lesson,
+        progresses: [...(lesson.progresses ?? [])]
+      }))
+    };
   }
 
-  isEnrolledCoursesEmpty(): boolean {
-    return this._enrolledCourses.size === 0;
+
+  // Course setters
+  setCourseDetails(courseId: string, course: CourseModel): void {
+    throw new Error('Method not implemented.');
   }
 
-  isCreatedCourseExists(courseId: string): boolean {
-    return this._createdCourses.has(courseId);
+  setCreatedCourses(courses: CourseModel[]): void {
+    this._createdCourses = new Map(
+      courses.filter((c) => c.id).map((c) => [c.id!, c])
+    );
+    this.saveToStorage(CourseType.Created);
+  }
+
+  setEnrolledCourses(courses: CourseModel[]): void {
+    this._enrolledCourses = new Map(
+      courses.filter((c) => c.id).map((c) => [c.id!, c])
+    );
+    this.saveToStorage(CourseType.Enrolled);
+  }
+
+  // Course modifiers
+  addCreatedCourse(course: CourseModel): void {
+    if (!course.id) return;
+    this._createdCourses.set(course.id, course);
+    this.saveToStorage(CourseType.Created);
+  }
+
+  addEnrolledCourse(course: CourseModel): void {
+    if (!course.id) return;
+    this._enrolledCourses.set(course.id, course);
+    this.saveToStorage(CourseType.Enrolled);
+  }
+
+  updateCreatedCourse(course: CourseModel): void {
+    if (!course.id) return;
+
+    if (this._createdCourses.has(course.id)) {
+      this._createdCourses.set(course.id, course);
+      this.saveToStorage(CourseType.Created);
+    }
+
+    if (this._enrolledCourses.has(course.id)) {
+      this._enrolledCourses.set(course.id, course);
+      this.saveToStorage(CourseType.Enrolled);
+    }
+  }
+
+
+  removeCourse(courseId: string): void {
+    const createdDeleted = this._createdCourses.delete(courseId);
+    const enrolledDeleted = this._enrolledCourses.delete(courseId);
+
+    if (createdDeleted) {
+      this.saveToStorage(CourseType.Created);
+    }
+
+    if (enrolledDeleted) {
+      this.saveToStorage(CourseType.Enrolled);
+    }
+  }
+
+  removeEnrolledCourse(courseId: string): void {
+    if (this._enrolledCourses.delete(courseId)) {
+      this.saveToStorage(CourseType.Enrolled);
+    }
   }
 
   isEnrolledToCourse(courseId: string): boolean {
     return this._enrolledCourses.has(courseId);
   }
 
-  setCreatedCourses(courses: CourseModel[]) {
-    this._createdCourses = new Map(
-      courses.map((course) => [course.id!, course])
-    );
-    this.saveToStorage(CoursesStorageKey.CreatedCourses, this._createdCourses);
-  }
+  // NOTE why the code so complected
+  // Lesson methods
+  addLesson(courseId: string, lesson: LessonModel): void {
+    const createdCourse = this._createdCourses.get(courseId);
+    if (createdCourse?.lessons) {
+      const index = createdCourse.lessons.findIndex(l => l.id === lesson.id);
+      if (index !== -1) {
+        createdCourse.lessons[index] = lesson;
+      } else {
+        createdCourse.lessons.push(lesson);
+      }
+      this.saveToStorage(CourseType.Created);
+    }
 
-  setEnrolledCourses(courses: CourseModel[]) {
-    this._enrolledCourses = new Map(
-      courses.map((course) => [course.id!, course])
-    );
-    this.saveToStorage(
-      CoursesStorageKey.EnrolledCourses,
-      this._enrolledCourses
-    );
-  }
-
-  updateEnrolledCourse(course: CourseModel) {
-    if (!course.id) return;
-
-    if (this._enrolledCourses.has(course.id)) {
-      // TODO: need to save progresses, and give course the saved progresses, because course (updated course) do'nt have progresses
-      this._enrolledCourses.set(course.id, course);
-      this.saveToStorage(
-        CoursesStorageKey.EnrolledCourses,
-        this._enrolledCourses
-      );
+    const enrolledCourse = this._enrolledCourses.get(courseId);
+    if (enrolledCourse?.lessons) {
+      const index = enrolledCourse.lessons.findIndex(l => l.id === lesson.id);
+      if (index !== -1) {
+        // Preserve progress data when updating existing lessons
+        const originalLesson = enrolledCourse.lessons[index];
+        const updatedLesson = {
+          ...lesson,
+          progresses: originalLesson.progresses || [] // Keep original progress data if it exists
+        };
+        enrolledCourse.lessons[index] = updatedLesson;
+      } else {
+        // Add new lesson with empty progress array
+        enrolledCourse.lessons.push({
+          ...lesson,
+          progresses: [] // Initialize with empty progress array
+        });
+      }
+      this.saveToStorage(CourseType.Enrolled);
     }
   }
 
-  pushCreatedCourse(course: CourseModel) {
-    if (!course.id) return;
-    this._createdCourses.set(course.id, course);
-    this.saveToStorage(CoursesStorageKey.CreatedCourses, this._createdCourses);
-  }
-
-  pushEnrolledCourse(course: CourseModel) {
-    if (!course.id) return;
-    this._enrolledCourses.set(course.id, course);
-    this.saveToStorage(
-      CoursesStorageKey.EnrolledCourses,
-      this._enrolledCourses
-    );
-  }
-
-  removeCourse(courseId: string) {
-    this.removeEnrolledCourse(courseId);
-    this._createdCourses.delete(courseId);
-    this._enrolledCourses.delete(courseId);
-    this.saveToStorage(CoursesStorageKey.CreatedCourses, this._createdCourses);
-  }
-
-  removeEnrolledCourse(courseId: string) {
-    this._enrolledCourses.delete(courseId);
-    this.saveToStorage(
-      CoursesStorageKey.EnrolledCourses,
-      this._enrolledCourses
-    );
-  }
-
-  pushLesson(courseId: string, lesson: LessonModel) {
-    const course = this._createdCourses.get(courseId);
-    if (!course || !course.lessons) {
-      return;
+  removeLesson(courseId: string, lessonId: string): void {
+    const createdCourse = this._createdCourses.get(courseId);
+    if (createdCourse?.lessons) {
+      createdCourse.lessons = createdCourse.lessons.filter(l => l.id !== lessonId);
+      this.saveToStorage(CourseType.Created);
     }
 
-    const lessonIndex = course.lessons.findIndex((l) => l.id === lesson.id);
-
-    // Update existing lesson
-    if (lessonIndex !== -1) course.lessons[lessonIndex] = lesson;
-    // Add new lesson
-    else course.lessons.push(lesson);
-
-    this.saveUpdatedCourse(course, CoursesStorageKey.CreatedCourses);
+    const enrolledCourse = this._enrolledCourses.get(courseId);
+    if (enrolledCourse?.lessons) {
+      enrolledCourse.lessons = enrolledCourse.lessons.filter(l => l.id !== lessonId);
+      this.saveToStorage(CourseType.Enrolled);
+    }
   }
 
-  removeLesson(courseId: string, lessonId: string) {
-    const course = this._createdCourses.get(courseId);
-    if (!course || !course.lessons) return;
-
-    course.lessons = course.lessons.filter((lesson) => lesson.id !== lessonId);
-    this.saveUpdatedCourse(course, CoursesStorageKey.CreatedCourses);
-  }
-
-  pushLessonProgress(
-    courseId: string,
-    lessonId: string,
-    progress: ProgressModel
-  ) {
+  addLessonProgress(courseId: string, lessonId: string, progress: ProgressModel): void {
     const course = this._enrolledCourses.get(courseId);
     if (!course || !course.lessons) return;
 
@@ -166,36 +191,74 @@ export class CourseStore {
     if (!lesson || !lesson.progresses) return;
 
     lesson.progresses.push(progress);
-
-    this.saveUpdatedCourse(course, CoursesStorageKey.EnrolledCourses);
+    this.saveToStorage(CourseType.Enrolled);
   }
 
-  private saveUpdatedCourse(
-    course: CourseModel,
-    courseStorageKey: CoursesStorageKey
-  ) {
-    if (courseStorageKey === CoursesStorageKey.CreatedCourses) {
-      this._createdCourses.set(course.id!, course);
-      this.saveToStorage(courseStorageKey, this._createdCourses);
-    } else if (courseStorageKey === CoursesStorageKey.EnrolledCourses) {
-      this._enrolledCourses.set(course.id!, course);
-      this.saveToStorage(courseStorageKey, this._enrolledCourses);
+  // NOTE why the code so complected
+  updateLesson(courseId: string, lessonId: string, lesson: LessonModel): void {
+    // Update in created courses if it exists
+    const createdCourse = this._createdCourses.get(courseId);
+    if (createdCourse?.lessons) {
+      const lessonIndex = createdCourse.lessons.findIndex(l => l.id === lessonId);
+      if (lessonIndex !== -1) {
+        const updatedLesson = { ...lesson };
+        if (!updatedLesson.id) updatedLesson.id = lessonId;
+
+        // Update the lesson
+        createdCourse.lessons[lessonIndex] = updatedLesson;
+        this.saveToStorage(CourseType.Created);
+      }
+    }
+
+    // Update in enrolled courses if it exists
+    const enrolledCourse = this._enrolledCourses.get(courseId);
+    if (enrolledCourse?.lessons) {
+      const lessonIndex = enrolledCourse.lessons.findIndex(l => l.id === lessonId);
+      if (lessonIndex !== -1) {
+        // Create updated lesson while preserving progresses
+        const originalLesson = enrolledCourse.lessons[lessonIndex];
+        const updatedLesson = {
+          ...originalLesson,  // Keep original properties
+          ...lesson,    // Apply updates
+          progresses: originalLesson.progresses // Preserve progresses
+        };
+
+        // Update the lesson
+        enrolledCourse.lessons[lessonIndex] = updatedLesson;
+        this.saveToStorage(CourseType.Enrolled);
+      }
     }
   }
 
-  private loadFromStorage(key: string): Map<string, CourseModel> {
-    const data = localStorage.getItem(key);
+  // Private helper methods
+  private loadFromStorage(courseType: CourseType): Map<string, CourseModel> {
     try {
-      const parsedData = data ? JSON.parse(data) : [];
-      return new Map(parsedData);
-    } catch (error) {
-      console.error(`Error loading ${key} from storage:`, error);
+      const raw = sessionStorage.getItem(courseType);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return new Map(parsed);
+    } catch (err) {
+      if (!environment.production) {
+        console.error(`Failed to load ${courseType} from sessionStorage:`, err);
+      }
       return new Map();
     }
   }
 
-  private saveToStorage(key: string, data: Map<string, CourseModel>) {
-    // Convert Map to array before storing, because Map is not directly serializable in JavaScript!
-    localStorage.setItem(key, JSON.stringify(Array.from(data.entries())));
+  private saveToStorage(courseType: CourseType): void {
+    try {
+      const data =
+        courseType === CourseType.Created
+          ? this._createdCourses
+          : this._enrolledCourses;
+
+      sessionStorage.setItem(
+        courseType,
+        JSON.stringify(Array.from(data.entries()))
+      );
+    } catch (err) {
+      if (!environment.production) {
+        console.error(`Failed to save ${courseType} to sessionStorage:`, err);
+      }
+    }
   }
 }

@@ -5,10 +5,9 @@ using OnlineLearningPlatform.Domain.Entities;
 
 namespace OnlineLearningPlatform.Application.Services.CourseManagement;
 
-public class CourseService(ICourseDataService courseDataService, IUserDataService userDataService, IMapper mapper) : ICourseService
+public class CourseService(ICourseDataService courseDataService, IMapper mapper) : ICourseService
 {
     private readonly ICourseDataService courseDataService = courseDataService;
-    private readonly IUserDataService userDataService = userDataService;
     private readonly IMapper mapper = mapper;
 
     public async Task<List<CourseDto>> GetCoursesAsync()
@@ -17,12 +16,9 @@ public class CourseService(ICourseDataService courseDataService, IUserDataServic
         return mapper.Map<List<CourseDto>>(courses);
     }
 
-    public async Task<CourseDto> GetCourseAsync(Guid userId, Guid courseId)
+    public async Task<CourseDto> GetCourseAsync(Guid courseId)
     {
-        Course? course;
-        if (userId == Guid.Empty) course = await courseDataService.GetCourseAsync(courseId);
-        else course = await courseDataService.GetCourseWithUserProgressAsync(userId, courseId);
-
+        Course? course = await courseDataService.GetCourseAsync(courseId);
         if (course is null) throw new KeyNotFoundException($"Course with ID {courseId} was not found.");
 
         return mapper.Map<CourseDto>(course);
@@ -33,7 +29,7 @@ public class CourseService(ICourseDataService courseDataService, IUserDataServic
         Course course = mapper.Map<Course>(courseDto);
 
         await courseDataService.AddCourseAsync(course);
-        await userDataService.SaveChangesAsync();
+        await courseDataService.SaveChangesAsync();
 
         return mapper.Map<CourseDto>(course);
     }
@@ -45,7 +41,7 @@ public class CourseService(ICourseDataService courseDataService, IUserDataServic
 
         await courseDataService.DeleteCourseAsync(course);
 
-        await userDataService.SaveChangesAsync();
+        await courseDataService.SaveChangesAsync();
     }
 
     public async Task<CourseDto> UpdateCourseAsync(Guid userId, CourseDto courseDto)

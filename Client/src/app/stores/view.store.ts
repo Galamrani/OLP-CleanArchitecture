@@ -1,13 +1,21 @@
-import { Injectable, Signal, signal } from '@angular/core';
+import { computed, effect, Injectable, Signal, signal } from '@angular/core';
 import { CourseViewType } from '../models/user-view.enum';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class ViewStore {
-  private _view = signal<CourseViewType>(this.getStoredView());
+  private _view = signal<CourseViewType>(this.loadViewFromSessionStorage());
+
+  isInstructorView = computed(() => this._view() === CourseViewType.Instructor);
+  isStudentView = computed(() => this._view() === CourseViewType.Student);
+  isDefaultView = computed(() => this._view() === CourseViewType.Default);
 
   constructor() {
-    (localStorage.getItem('userView') as CourseViewType) ||
-      CourseViewType.Default;
+    // Sync changes to sessionStorage automatically
+    effect(() => {
+      this.saveViewToSessionStorage(this._view());
+    });
   }
 
   get view(): Signal<CourseViewType> {
@@ -15,16 +23,20 @@ export class ViewStore {
   }
 
   setView(newView: CourseViewType) {
-    localStorage.setItem('userView', newView);
     this._view.set(newView);
   }
 
   clearView() {
-    localStorage.removeItem('userView');
+    this._view.set(CourseViewType.Default);
+    sessionStorage.removeItem('userView');
   }
 
-  private getStoredView(): CourseViewType {
-    const storedView = localStorage.getItem('userView');
-    return storedView ? (storedView as CourseViewType) : CourseViewType.Default;
+  private loadViewFromSessionStorage(): CourseViewType {
+    const storedView = sessionStorage.getItem('userView');
+    return (storedView as CourseViewType) || CourseViewType.Default;
+  }
+
+  private saveViewToSessionStorage(view: CourseViewType): void {
+    sessionStorage.setItem('userView', view);
   }
 }

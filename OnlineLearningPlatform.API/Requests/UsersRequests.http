@@ -1,0 +1,34 @@
+@url=http://localhost:5048/api/v1/users
+@userId=
+@courseId=
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMTExMTExMS0xMTExLTExMTEtMTExMS0xMTExMTExMTExMTEiLCJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkpvaG4iLCJuYmYiOjE3NDM0Mjc5NDgsImV4cCI6MTc0MzQ0NTk0OCwiaWF0IjoxNzQzNDI3OTQ4LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.JnLxH7O4NisYzz-9WHPm3fNFRaW0fbmJFGfbcg1CP14
+
+
+
+### Get Enrolled Course Endpoint
+GET {{url}}/{{userId}}/enrollments/{{courseId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### Get Enrolled Courses Endpoint 
+GET {{url}}/{{userId}}/enrollments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### Get Created Courses Endpoint
+GET {{url}}/{{userId}}/courses
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### Add Enrollment Endpoint
+POST {{url}}/{{courseId}}/enrollments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Delete Enrollment Endpoint
+DELETE  {{url}}/{{courseId}}/enrollments
+Authorization: Bearer {{token}}
+Content-Type: application/json
