@@ -12,7 +12,7 @@ export class UserStore {
   getUserId = computed(() => this._user()?.id);
 
   constructor() {
-    // Sync user state to sessionStorage when updated automatically
+    // Sync user state to sessionStorage automatically
     effect(() => {
       this.saveUserToSessionStorage(this._user());
     });

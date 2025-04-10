@@ -64,9 +64,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<ILessonService, LessonService>();
     builder.Services.AddScoped<IUserService, UserService>();
 
-    // TODO: Configure FluentValidation to throw exceptions without body
     builder.Services.AddFluentValidationAutoValidation();
-    builder.Services.AddValidatorsFromAssemblyContaining<ValidatorAssemblyMarker>();
+    builder.Services.AddValidatorsFromAssembly(typeof(CourseDtoValidator).Assembly);
 
     builder.Services.AddControllers();
 }

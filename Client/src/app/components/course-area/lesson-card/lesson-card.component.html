@@ -1,43 +1,57 @@
-<div class="card lesson-card text-center shadow-sm rounded-4">
-  <div class="card-body d-flex flex-column p-3">
+<div class="card lesson-card">
+  <div class="card-body">
 
-    <!-- Lesson Info -->
-    <h6 class="card-title text-primary fw-semibold mb-2">{{ lesson().title }}</h6>
-    <p class="card-text description small text-muted mb-3">{{ lesson().description }}</p>
+    <!-- Video Section -->
+    <div class="video-container">
 
-    <!-- Video Player (Embed) -->
-    <div class="video-thumbnail position-relative rounded overflow-hidden mb-3">
-      <youtube-player *ngIf="userStore.isLoggedIn()" [videoId]="getYoutubeVideoId(lesson().videoUrl)!"
-        (stateChange)="onPlayerStateChange($event)" width="330" height="250">
-      </youtube-player>
-
-      <!-- Lock Overlay for Guests -->
+      <!-- Placeholder and Lock Message (for guests only) -->
       @if (!userStore.isLoggedIn()) {
-      <div
-        class="lock-overlay d-flex flex-column justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50">
-        <i class="bi bi-lock-fill text-white fs-4 mb-2"></i>
-        <p class="text-white small m-0 text-center">You need to log in to watch this lesson</p>
+      <div class="video-thumbnail-wrapper position-relative">
+        <!-- YouTube thumbnail -->
+        <img class="video-thumbnail w-100"
+          [src]="'https://img.youtube.com/vi/' + getYoutubeVideoId(lesson().videoUrl) + '/hqdefault.jpg'"
+          alt="Video thumbnail">
+
+        <!-- Lock overlay to block clicks -->
+        <div class="lock-overlay text-center p-3 d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-lock-fill fs-3 text-white mb-2"></i>
+          <p class="text-white small fw-medium mb-0">Login in to watch</p>
+        </div>
       </div>
+      } @else {
+      <!-- Embedded YouTube Video -->
+      <youtube-player *ngIf="userStore.isLoggedIn()" [videoId]="getYoutubeVideoId(lesson().videoUrl)!"
+        (stateChange)="onPlayerStateChange($event)" width="500" height="230">
+      </youtube-player>
       }
 
-      <!-- Viewed Icon -->
+
+      <!-- Viewed Badge (visible to students only if lesson is marked as viewed) -->
       @if (viewStore.isStudentView() && isViewed()) {
       <div class="viewed-badge position-absolute top-0 end-0 m-2" title="Viewed">
-        <i class="bi bi-eye-fill"></i>
+        <i class="bi bi-check2 fs-6"></i>
       </div>
       }
     </div>
 
-    <!-- Action Buttons -->
-    @if (viewStore.isInstructorView()) {
-    <div class="mt-auto d-flex justify-content-center gap-2 pt-2 border-top">
-      <button class="btn btn-outline-primary btn-sm px-3" (click)="handleEditClick()">
-        <i class="bi bi-pencil"></i>
-      </button>
-      <button class="btn btn-outline-danger btn-sm px-3" (click)="handleDeleteClick()">
-        <i class="bi bi-trash"></i>
-      </button>
+    <div class="card-content">
+
+      <!-- Lesson Content Section -->
+      <h6 class="card-title">{{ lesson().title }}</h6>
+      <p class="description">{{ lesson().description }}</p>
+
+
+      <!-- Instructor Action Buttons (Edit/Delete) -->
+      @if (viewStore.isInstructorView()) {
+      <div class="mt-auto d-flex justify-content-end gap-2 pt-2">
+        <button class="btn btn-outline-primary btn-sm rounded-pill" (click)="handleEditClick()">
+          <i class="bi bi-pencil me-1"></i>Edit
+        </button>
+        <button class="btn btn-outline-danger btn-sm rounded-pill" (click)="handleDeleteClick()">
+          <i class="bi bi-trash me-1"></i>Delete
+        </button>
+      </div>
+      }
     </div>
-    }
   </div>
 </div>

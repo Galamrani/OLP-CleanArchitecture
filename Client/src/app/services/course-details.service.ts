@@ -32,11 +32,6 @@ export class CourseDetailsService {
     const courseType = this.getCourseTypeForCurrentView();
     const cachedCourse = this.courseStore.getCourseDetails(courseId, courseType);
 
-    if (cachedCourse && courseType === CourseType.Created) {
-      this._courseSubject.next(cachedCourse);
-      return of(cachedCourse);
-    }
-
     if (cachedCourse && cachedCourse.lessons?.length! > 0) {
       this._courseSubject.next(cachedCourse);
       return of(cachedCourse);
@@ -82,10 +77,14 @@ export class CourseDetailsService {
       }));
   }
 
+  isLessonViewed(courseId: string, lessonId: string): boolean {
+    return this.courseStore.isLessonViewed(courseId, lessonId);
+  }
+
   private emitUpdate(courseId: string): void {
     const courseType = this.viewStore.isStudentView() ? CourseType.Enrolled : CourseType.All;
     const course = this.courseStore.getCourseDetails(courseId, courseType)
-    if (course) this._courseSubject.next(course);
+    if (course) this._courseSubject.next({ ...course });;
   }
 
   private getCourseTypeForCurrentView(): CourseType {

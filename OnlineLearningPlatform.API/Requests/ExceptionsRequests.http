@@ -1,11 +1,11 @@
 @url=http://localhost:5048/api/v1/courses
 @url2=http://localhost:5048/api/v1/users
 @courseId=ef0c94df-ff57-48e7-9073-311d66747dc4
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwNjZlODQzOS04NzY0LTQ4MzctYjQyOS0zMTBmYjcyYjUzODQiLCJlbWFpbCI6ImJhcnRAZXhhbXBsZS5jb20iLCJ1bmlxdWVfbmFtZSI6IkJhcnQiLCJuYmYiOjE3NDMxNzA2NDIsImV4cCI6MTc0MzE4ODY0MiwiaWF0IjoxNzQzMTcwNjQyLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.4OuU_iGj5gO53h49KqjsJgFtNrqT3GGLjK35vBtklrs
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMjIyMjIyMi0yMjIyLTIyMjItMjIyMi0yMjIyMjIyMjIyMjIiLCJlbWFpbCI6InNhcmFoQGV4YW1wbGUuY29tIiwidW5pcXVlX25hbWUiOiJTYXJhaCIsIm5iZiI6MTc0NDI3MTQ4OSwiZXhwIjoxNzQ0Mjg5NDg5LCJpYXQiOjE3NDQyNzE0ODksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAxMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDIwMCJ9.cAAaQhzVPeCS65I80HIjf34hqHCpYs-x0wQVQA59tyQ
 
 
 
-@creatorId=db2daef7-1b42-4c9f-9c07-56aba27a27ed
+@creatorId=22222222-2222-2222-2222-222222222222
 
 
 
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 
-### (ArgumentException) Unenroll from a course you're not enrolled in
+### (ForbiddenException) Unenroll from a course you're not enrolled in
 DELETE  {{url2}}/00000000-0000-0000-0000-000000000000/enrollments/{{courseId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -41,6 +41,6 @@ Content-Type: application/json
 
 {
   "creatorId": "{{creatorId}}",
-  "title": "",
+  "title": "Intro to FluentValidation",
   "description": "Fine"
 }

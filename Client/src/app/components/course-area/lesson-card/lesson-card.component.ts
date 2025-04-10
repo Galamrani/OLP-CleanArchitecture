@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { LessonModel } from '../../../models/lesson.model';
 import { ViewStore } from '../../../stores/view.store';
 import { UserStore } from '../../../stores/user.store';
 import { RouterModule } from '@angular/router';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { CommonModule } from '@angular/common';
+import { CourseDetailsService } from '../../../services/course-details.service';
 
 enum PlayerState {
   UNSTARTED = -1,
@@ -22,20 +23,22 @@ enum PlayerState {
   styleUrl: './lesson-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LessonCardComponent {
+export class LessonCardComponent implements OnInit {
   lesson = input.required<LessonModel>();
   deleteLessonClicked = output<{ courseId: string; lessonId: string }>();
   editLessonClicked = output<LessonModel>();
   videoClicked = output<{ courseId: string; lessonId: string; }>();
 
-  isViewed = computed(() => {
-    const progresses = this.lesson().progresses;
-    return progresses && progresses.length > 0;
-  });
+  isViewed = signal(false);
+
+  ngOnInit(): void {
+    this.updateIsViewedStatus();
+  }
 
   constructor(
     public viewStore: ViewStore,
     public userStore: UserStore,
+    private courseDetailsService: CourseDetailsService,
   ) { }
 
   handleDeleteClick() {
@@ -59,13 +62,16 @@ export class LessonCardComponent {
   }
 
   onPlayerStateChange(event: any) {
-    if (event.data === PlayerState.PLAYING) {
-      this.handleVideoClick();
-    }
+    if (event.data === PlayerState.PLAYING) this.handleVideoClick();
+    this.updateIsViewedStatus()
   }
 
   getYoutubeVideoId(url: string): string | null {
     const match = url.match(/(?:youtube\.com\/(?:.*v=|.*\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? match[1] : null;
+  }
+
+  private updateIsViewedStatus() {
+    this.isViewed.set(this.courseDetailsService.isLessonViewed(this.lesson().courseId, this.lesson().id!));
   }
 }

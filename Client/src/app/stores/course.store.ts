@@ -53,21 +53,10 @@ export class CourseStore {
 
     if (!course) return undefined;
 
-    return {
-      ...course,
-      lessons: (course.lessons ?? []).map(lesson => ({
-        ...lesson,
-        progresses: [...(lesson.progresses ?? [])]
-      }))
-    };
+    return course
   }
-
 
   // Course setters
-  setCourseDetails(courseId: string, course: CourseModel): void {
-    throw new Error('Method not implemented.');
-  }
-
   setCreatedCourses(courses: CourseModel[]): void {
     this._createdCourses = new Map(
       courses.filter((c) => c.id).map((c) => [c.id!, c])
@@ -109,7 +98,6 @@ export class CourseStore {
     }
   }
 
-
   removeCourse(courseId: string): void {
     const createdDeleted = this._createdCourses.delete(courseId);
     const enrolledDeleted = this._enrolledCourses.delete(courseId);
@@ -133,41 +121,36 @@ export class CourseStore {
     return this._enrolledCourses.has(courseId);
   }
 
-  // NOTE why the code so complected
+  isLessonViewed(courseId: string, lessonId: string): boolean {
+    const enrolledCourse = this._enrolledCourses.get(courseId);
+    if (enrolledCourse?.lessons) {
+      const lesson = enrolledCourse.lessons.find(l => l.id === lessonId);
+      if (lesson?.progresses && lesson.progresses.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Lesson methods
   addLesson(courseId: string, lesson: LessonModel): void {
     const createdCourse = this._createdCourses.get(courseId);
     if (createdCourse?.lessons) {
       const index = createdCourse.lessons.findIndex(l => l.id === lesson.id);
-      if (index !== -1) {
-        createdCourse.lessons[index] = lesson;
-      } else {
-        createdCourse.lessons.push(lesson);
-      }
+      if (index !== -1) return
+      createdCourse.lessons.push(lesson);
       this.saveToStorage(CourseType.Created);
     }
 
     const enrolledCourse = this._enrolledCourses.get(courseId);
     if (enrolledCourse?.lessons) {
       const index = enrolledCourse.lessons.findIndex(l => l.id === lesson.id);
-      if (index !== -1) {
-        // Preserve progress data when updating existing lessons
-        const originalLesson = enrolledCourse.lessons[index];
-        const updatedLesson = {
-          ...lesson,
-          progresses: originalLesson.progresses || [] // Keep original progress data if it exists
-        };
-        enrolledCourse.lessons[index] = updatedLesson;
-      } else {
-        // Add new lesson with empty progress array
-        enrolledCourse.lessons.push({
-          ...lesson,
-          progresses: [] // Initialize with empty progress array
-        });
-      }
-      this.saveToStorage(CourseType.Enrolled);
+      if (index !== -1) return
+      enrolledCourse.lessons.push(lesson);
     }
+    this.saveToStorage(CourseType.Enrolled);
   }
+
 
   removeLesson(courseId: string, lessonId: string): void {
     const createdCourse = this._createdCourses.get(courseId);
@@ -194,7 +177,6 @@ export class CourseStore {
     this.saveToStorage(CourseType.Enrolled);
   }
 
-  // NOTE why the code so complected
   updateLesson(courseId: string, lessonId: string, lesson: LessonModel): void {
     // Update in created courses if it exists
     const createdCourse = this._createdCourses.get(courseId);
@@ -202,9 +184,6 @@ export class CourseStore {
       const lessonIndex = createdCourse.lessons.findIndex(l => l.id === lessonId);
       if (lessonIndex !== -1) {
         const updatedLesson = { ...lesson };
-        if (!updatedLesson.id) updatedLesson.id = lessonId;
-
-        // Update the lesson
         createdCourse.lessons[lessonIndex] = updatedLesson;
         this.saveToStorage(CourseType.Created);
       }
@@ -220,9 +199,8 @@ export class CourseStore {
         const updatedLesson = {
           ...originalLesson,  // Keep original properties
           ...lesson,    // Apply updates
-          progresses: originalLesson.progresses // Preserve progresses
         };
-
+        updatedLesson.progresses = originalLesson.progresses;
         // Update the lesson
         enrolledCourse.lessons[lessonIndex] = updatedLesson;
         this.saveToStorage(CourseType.Enrolled);
